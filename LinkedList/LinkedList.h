@@ -180,14 +180,14 @@ private:
     }
 };
 
-template<> void LinkedList<Song>::show()
-{
-    LLNode<Song> * curr = head;
-    while (curr != nullptr)
-    {
-        cout << curr->val.artist << ", " << curr->val.name << ", " << curr->val.genre << endl;
-        curr = curr->next;
-    }
-}
+// template<> void LinkedList<Song>::show()
+// {
+//     LLNode<Song> * curr = head;
+//     while (curr != nullptr)
+//     {
+//         cout << curr->val.artist << ", " << curr->val.name << ", " << curr->val.genre << endl;
+//         curr = curr->next;
+//     }
+// }
 
 #endif //DSTR_ASSIGNMENT_LINKEDLIST_H
