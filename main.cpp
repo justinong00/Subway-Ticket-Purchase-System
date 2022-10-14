@@ -7,7 +7,8 @@
 using namespace std;
 
 int main() {
-
+	// HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+	// HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 	try {
 		DoublyLinkedList<Subway> lst;
 		lst.insertAtFront(Subway(10, "Dumb", "Sultan Ismail", "Plaza Rakyat", 8, 0.8, 7, 6, 0.6, 5, "APU"));
