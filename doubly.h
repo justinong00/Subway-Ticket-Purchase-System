@@ -31,7 +31,7 @@ class DoublyLinkedList {
 		}
 
 		int getSize() {
-				return size;
+			return size;
 		}
 
 		void showForward() {
@@ -369,11 +369,12 @@ template<>
 void DoublyLinkedList<Subway> :: showForward(int mode) {
 	if (size > 0) {
 		DoublyNode<Subway> *current = head;
+		int opt = 1;
 		while (current != nullptr) {
 			if (mode == 1)
 				cout << current->data.subwayId << " ";
 			else if (mode == 2)
-				cout << current->data.currentStationName << " ";
+				cout << current->data.currentStationName << endl;
 			else if (mode == 3)
 				cout << current->data.travelFareBetweenNextStation<< " ";
 			else if (mode == 4)
@@ -382,7 +383,10 @@ void DoublyLinkedList<Subway> :: showForward(int mode) {
 				cout << current->data.travelTimeBetweenNextStation<< " ";
 			else if (mode == 6)
 				cout << current->data.travelTimeBetweenNextStation<< " ";
+			else if (mode == 7) 	// for selecting a station.
+				cout << opt << ". " <<  current->data.currentStationName << endl;
 			current = current->next;
+			opt++;
 		}
 	}
 	else
@@ -398,7 +402,7 @@ void DoublyLinkedList<Subway> :: showBackward(int mode) {
 			if (mode == 1)
 				cout << current->data.subwayId << " ";
 			if (mode == 2)
-				cout << current->data.currentStationName << " ";
+				cout << current->data.currentStationName << endl;
 			current = current->prev;
 		}
 	}
@@ -448,7 +452,7 @@ void DoublyLinkedList<Subway> :: showNextNodesAfterIndex(int index) {
 		if (size > 1)
 			if (index >= 0 && index < size) {
 				if (index == size - 1)
-					cout << "No Next Destinations. Chan Sow Line station is the final station from Titiwangsa -> Chan Sow Line line" << endl;
+					cout << "None. It is LAST STOP" << endl;
 				if (index < size / 2) {
 					DoublyNode<Subway> *current = head;
 					for (int i = 0; i < index; i++)
@@ -484,7 +488,7 @@ void DoublyLinkedList<Subway> :: showPreviousNodesAfterIndex(int index) {
 		if (size > 1)
 			if (index >= 0 && index < size) {
 				if (index == 0)
-					cout << "No Previous Destinations. Titiwangsa station is the final station from Chan Sow Lin -> Titiwangsa line" << endl;
+					cout << "None. It is LAST STOP" << endl;
 				else if (index < size / 2) {
 					DoublyNode<Subway> *current = head;
 					for (int i = 0; i < index; i++)
@@ -631,4 +635,4 @@ void  DoublyLinkedList<Subway> :: sortListAscending() {
 
 
 
-#endif /* DOUBLY_H_ */
+#endif
