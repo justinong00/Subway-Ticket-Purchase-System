@@ -38,10 +38,4 @@ class Subway{
 			this->nearbySightseeingSpots = nearbySightseeingSpots;
 		}
 };
-
-
-
-
-
-
-#endif /* SUBWAY_H_ */
+#endif
