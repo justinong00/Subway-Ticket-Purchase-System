@@ -2,8 +2,16 @@
 #define MENU_H_
 
 # include <string>
+# include <limits>
+# include <iostream>
 # include <stdexcept>
-#include<limits>
+# include <cstddef>
+# include <windows.h>
+# include <unistd.h>
+# include <iomanip>
+# include <cctype>
+# include <algorithm>
+# include <regex>
 
 using namespace std;
 
@@ -25,30 +33,94 @@ public:
 	}
 
 	static void addSpace() {
-		cout << endl;
-		cout << endl;
-		cout << endl;
-		cout << endl;
-		cout << endl;
+		for (int i = 0; i < 50; i++) {
+			cout << endl;
+		}
 	}
 
-	static void recordAndValidateOption(int min_val, int max_val) {
+	static bool isInteger(string user_input) {
+		// catch string with alphanumeric and whitespace characters, avert double values by catching period(.)
+		const regex pattern("^[-+]?[0-9]+$");	//	cond: optional -/+ sign in str begin, must be digit in str end
+		if(! regex_match(user_input, pattern)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	// https://stackoverflow.com/questions/10516967/regexp-for-a-double
+	static bool isDouble(string user_input) {
+		// allows zero or a valid non-zero integer;
+		// catch string with alphanumeric and whitespace characters
+		const regex pattern("^[-+]?(0|([1-9][0-9]*))(\\.[0-9]+)?$");
+		if(! regex_match(user_input, pattern)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	template<typename T, typename U>
+	static bool isInBetween(T min_val, T max_val, U valToCheck) {
+		// catch out of range values
+		if ( !(valToCheck >= min_val && valToCheck <= max_val) ) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	static bool isValidStationName(string user_input) {
+		// only allow string with alphabets and either one space or hyphen between words or alphabet
+		const regex pattern("[A-Za-z]+([ -][A-Za-z]+)?");
+		if(! regex_match(user_input, pattern)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	static bool isStringPureZero(string user_input) {
+		// check if string is just "0", allows user to abort the subway registration anytime, Go Back Previous.
+		const regex pattern("^[0]$");
+		if(! regex_match(user_input, pattern)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	static void showErrorMsg(string description) {
+		cerr << description + ". Try Again\n" << endl;
+		Sleep(100);
+	}
+
+	static void recordAndValidateOption(int min_val, int max_val, string inputTitle = "option") {
 		while (true) {
 			cout << endl;
-			cout << "Enter option: ";
-			cin >> option;
-			// if user input is STRING
-			if (cin.fail()) {
-				cin.clear();
-				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				cout << "Invalid input. Try Again" << endl;
+			cout << "Enter " + inputTitle + ": ";
+			string user_input;
+			// read user_input as string including whitespaces
+			getline(cin, user_input);
+			// catch string with alphanumeric, whitespace characters, avert double values by catching period(.)
+			if ( ! isInteger(user_input) ) {
+				showErrorMsg("Invalid input");
+				continue;
 			}
-			// is user input is NOT WITHIN RANGE OF MENU OPTION VALUES
-			else if ( !(option >= min_val && option <= max_val) ) {
-				cout << "Option out of range. Try Again" << endl;
+			// convert user input to integer
+			int int_val = stoi(user_input);
+			// catch out of range values for menu option
+			if ( ! isInBetween(min_val, max_val, int_val) ) {
+				showErrorMsg("Option out of range");
+				continue;
 			}
-			else
-				break;
+			Menu::option = int_val;
+			break;
 		}
 	}
 
@@ -60,7 +132,19 @@ public:
 		cout << "4. Purchase A Ticket" << endl;
 		cout << "5. View Purchase History" << endl;
 		cout << "6. Delete Purchase" << endl;
-		recordAndValidateOption(1, 6);
+		recordAndValidateOption(0, 6);
+	}
+
+	static void showAdminMenu() {
+		addHeader("Admin Menu", "Log Out");
+		cout << "1. Add New Subway Station" << endl;
+		cout << "2. Modify Subway Station Information" << endl;
+		cout << "3. View All Ticket Purchases" << endl;
+		cout << "4. Sort Ticket Purchase According To Passenger Name" << endl;
+		cout << "5. Search Customer Ticket Purchase" << endl;
+		cout << "6. Modify Customer Ticket Purchase" << endl;
+		cout << "7. Delete Customer Ticket Purchase" << endl;
+		recordAndValidateOption(0, 7);
 	}
 
 	static void addExitMenu(string menuTitle) {
@@ -68,6 +152,7 @@ public:
 		cout << "=================================================================" << endl;
 		cout << "Enter -1 to \"Exit To " << menuTitle << "\"" << endl;
 	}
+
 };
 
 
