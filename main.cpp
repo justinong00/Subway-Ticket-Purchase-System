@@ -1,6 +1,13 @@
 # include <iostream>
 # include <string>
 # include <stdexcept>
+# include <iomanip>      // std::setprecision
+# include <windows.h>
+# include <unistd.h>
+# include <bits/stdc++.h>
+# include <cctype>
+# include <limits>
+# include <regex>
 # include "subway.h"
 # include "doubly.h"
 # include "menu.h"
@@ -9,8 +16,20 @@ using namespace std;
 
 int Menu::option = 0;	// initializing static member variable from Menu class
 
-void Insert() {
-
+// https://stackoverflow.com/questions/63238594/how-to-change-object-property-based-on-function-parameter-c
+// pointer-to-member concept
+// Purpose: catch used data from existing nodes, like name, id, etc..
+// T is data type for the value to be checked
+// U is the class of the object
+// V is the custom class (E.g., Subway)
+template<typename T, typename U, typename V>
+bool isTaken (T valToCheck, U classObj, T V::*member) {
+	for (int i = 0; i < classObj.getSize(); i++) {
+		if (valToCheck == classObj.getNodeAtIndex(i)->data.*member) {
+			return true;
+		}
+	}
+	return false;
 }
 
 int main() {
@@ -25,8 +44,8 @@ int main() {
 		lst.insertAtEnd(Subway(7, "Pudu", "Hang Tuah", "Chan Sow Lin", 5, 0.5, 4, 5, 0.5, 4, "One Utama"));
 		lst.insertAtEnd(Subway(8, "Chan Sow Lin", "Pudu", "", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
-
-		while (true) {
+		// CUSTOMER FUNCTIONALITY
+		/*while (true) {
 			CustomerMenu:	// label for goto
 			Menu::showCustomerMenu();
 			Menu::addSpace();
@@ -43,7 +62,7 @@ int main() {
 					Menu::recordAndValidateOption(0, 2);
 					Menu::addSpace();
 					// Check Choose Route Option
-					if (Menu::option == 0){		// Go Back to CUSTOMER MENU
+					if (Menu::option == 0){		// Go Back to Customer Menu
 						break;
 					}
 					// Order of Stations
@@ -67,7 +86,7 @@ int main() {
 					}
 					// Check Order of Stations Option
 					if (Menu::option == -1){
-						goto CustomerMenu;	// Exit to CUSTOMER MENU
+						goto CustomerMenu;	// Exit to Customer Menu
 					}
 					else	// Go Back to Choose Route
 						continue;
@@ -88,7 +107,7 @@ int main() {
 					Menu::recordAndValidateOption(0, 4);
 					Menu::addSpace();
 					// Check Select Station Detail Option
-					if (Menu::option == 0){		// Go Back to CUSTOMER MENU
+					if (Menu::option == 0){		// Go Back to Customer Menu
 						break;
 					}
 
@@ -137,15 +156,203 @@ int main() {
 						Menu::recordAndValidateOption(-1, 0);	// -1 Exit, 0 Go Back Previous
 						Menu::addSpace();
 						if (Menu::option == -1){
-							goto CustomerMenu;	// Exit to CUSTOMER MENU
+							goto CustomerMenu;	// Exit to Customer Menu
 						}
 						else	// Go Back to Select A Station
 							continue;
 					}
 				}
 			}
+
+
+
+			// 3. View Travel Information
+			else if (Menu::option == 3) {
+				while (true) {
+					// Select Start And End Stations
+					int startStationOpt, endStationOpt;
+					Menu::addHeader("Select Start And End Stations", "Go Back");
+					lst.showForward(7);
+					// Check Select Start And End Stations Option
+					Menu::recordAndValidateOption(0, lst.getSize(), "Start Station");
+					if (Menu::option == 0){		// Enter Start Station: 0, means want to Go Back to Customer Menu
+						Menu::addSpace();
+						break;
+					}
+					else
+						startStationOpt = Menu::option;
+					Menu::recordAndValidateOption(0, lst.getSize(), "End Station");
+					if (Menu::option == 0){		// Enter End Station: 0, means want to Go Back to Customer Menu
+						Menu::addSpace();
+						break;
+					}
+					else
+						endStationOpt = Menu::option;
+					Menu::addSpace();
+
+					// Travel Information From {Start Station} to {End Station}
+					Menu::addHeader("Travel Information From " + lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName + " to " + lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName, "Go Back");
+					Menu::addSubHeader("Travel Distance");
+					cout << lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 1) << " km" << endl;	// returns Travel Distance
+					cout << endl;
+					Menu::addSubHeader("Travel Expenses");
+					cout << setprecision(2) << fixed;	// show two decimal places, e.g., RM 4.50
+					cout << "RM " << lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 2) << endl;	// returns Travel Fare
+					cout << endl;
+					Menu::addSubHeader("Travel Time");
+					cout << setprecision(0) << fixed;	// reset the setprecision output buffer to not affect following output
+					cout << lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 3) << " mins" << endl;	// returns Travel Time
+
+					// Check Option For Final Menu
+					Menu::addExitMenu("Customer Menu");
+					Menu::recordAndValidateOption(-1, 0);	// -1 Exit, 0 Go Back Previous
+					Menu::addSpace();
+					if (Menu::option == -1){
+						goto CustomerMenu;	// Exit to Customer Menu
+					}
+					else	// Go Back to Select A Station
+						continue;
+				}
+			}
+		}*/
+
+
+		// ADMIN FUNCTIONALITY
+		while (true) {
+			AdminMenu:
+			Menu::showAdminMenu();
+			Menu::addSpace();
+
+			// 1. Add New Subway Station
+			if (Menu::option == 1) {
+				while (true) {
+					// Select New Station Location
+					Menu::addHeader("Select New Station Location", "Go Back");
+					cout << "1. Add As First Station" << endl;
+					cout << "2. Add As Last Station" << endl;
+					cout << "3. Add In Between Stations" << endl;
+					Menu::recordAndValidateOption(0, 3);
+					Menu::addSpace();
+					// Check Select New Station Location Option
+					if (Menu::option == 0){		// Go Back to Admin Menu
+						break;
+					}
+
+					else if (Menu::option == 3) {
+						while (true) {
+							// Select Location
+							Menu::addHeader("Select Location", "Go Back");
+							Menu::addSubHeader("Between");
+							lst.showForwardEachNodeAndItsNextNode();
+							Menu::recordAndValidateOption(0, lst.getSize() - 1);	// -1 becasue for e.g, 7 routes from 8 stations
+							Menu::addSpace();
+
+							// Enter New Station Details
+							Menu::addHeader("Enter New Station Details", "Go Back");
+							string tempUserInput, stationName;
+							int stationID;
+							bool goBack = false;	// counter to track if user aborts the sunbway registration
+							double stationDistToPrev, stationDistToNext, stationFareToPrev, stationFareToNext, stationTimeToPrev, stationTimeToNext;
+							while (true) {
+								// Enter New Subway ID
+								Menu::addSubHeader("Enter New Subway ID");
+								cout << "-> ";
+								// read user_input as string including whitespaces
+								getline(cin, tempUserInput);
+								// 0, Go Back Previous -> user abort
+								if ( Menu::isStringPureZero(tempUserInput) ) {
+									goBack = true;
+									Menu::addSpace();
+									break;
+								}
+								// catch string with alphanumeric and whitespace characters
+								if ( ! Menu::isInteger(tempUserInput) ) {
+									Menu::showErrorMsg("Invalid input");
+									continue;
+								}
+								// convert user input to integer
+								stationID = stoi(tempUserInput);	// implicitly removes + or - sign if have
+								// assume ID can be only 1-10000, catch out of range values
+								if ( ! Menu::isInBetween(1, 10000, stationID) ) {
+									Menu::showErrorMsg("ID out of range (1-10000 only)");
+									continue;
+								}
+								// catch used ID from doubly linked list
+								if ( isTaken(stationID, lst, &Subway::subwayId) ) {
+									Menu::showErrorMsg("Subway ID taken");
+									continue;
+								}
+								// ! verified Subway ID
+								cout << endl;
+								break;
+							}
+							while (! goBack) {
+								// Enter New Station Name
+								Menu::addSubHeader("Enter New Station Name");
+								cout << "-> ";
+								// read user_input as string including whitespaces
+								getline(cin, tempUserInput);
+								// 0, Go Back Previous -> user abort
+								if ( Menu::isStringPureZero(tempUserInput) ) {
+									goBack = true;
+									Menu::addSpace();
+									break;
+								}
+								// only allow string with alphabets and either one space or hyphen between
+								if ( ! Menu::isValidStationName(tempUserInput) ) {
+									Menu::showErrorMsg("Invalid station name");
+									continue;
+								}
+								// assume stationName cannot be alphabet
+								if ( tempUserInput.length() == 1) {
+									Menu::showErrorMsg("Invalid station name (2 characters or more needed)");
+									continue;
+								}
+								// catch used stationName from doubly linked list
+								if ( isTaken(tempUserInput, lst, &Subway::currentStationName) ) {
+									Menu::showErrorMsg("Station Name taken");
+									continue;
+								}
+								// ! verified Station Name
+								stationName = tempUserInput;
+								cout << endl;
+								break;
+							}
+							while (! goBack) {
+								// Enter {New Station}'s Travel Distance To {Previous Station}
+								Menu::addSubHeader("Enter " + stationName + "'s Travel Distance To " + lst.getNodeAtIndex(Menu::option - 1)->data.currentStationName);
+								cout << "-> ";
+								// read user_input as string including whitespaces
+								getline(cin, tempUserInput);
+								// 0, Go Back Previous -> user abort
+								if ( Menu::isStringPureZero(tempUserInput) ) {
+									goBack = true;
+									Menu::addSpace();
+									break;
+								}
+								if ( ! Menu::isDouble(tempUserInput) ) {
+									Menu::showErrorMsg("Invalid input");
+									continue;
+								}
+								// convert user input to double
+								stationDistToPrev = stod(tempUserInput);	// implicitly removes + or - sign if have
+								// assume stationDistToPrev can be only 1-10000, catch out of range values
+								if ( ! Menu::isInBetween(1, 10000, stationDistToPrev) ) {
+									Menu::showErrorMsg("Distance out of range (1.0-10000 only)");
+									continue;
+								}
+								// ! verified Subway ID
+								cout << endl;
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
+
+
 	catch (const invalid_argument& e)
 	{
 		cerr << e.what()<< endl;
