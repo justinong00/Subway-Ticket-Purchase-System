@@ -416,9 +416,11 @@ void DoublyLinkedList<Subway> :: showForwardEachNodeAndItsNextNode() {
 	if (size > 0)
 		if (size > 1) {
 			DoublyNode<Subway> *current = head;
+			int opt = 1;
 			for (int i = 0; i < size - 1; i++) {	// size - 1 because tail node's next is nullptr
-				cout << current->data.currentStationName << " -> " << current->next->data.currentStationName << endl;
+				cout << opt << ". " << current->data.currentStationName << " -> " << current->next->data.currentStationName << endl;
 				current = current->next;
+				opt++;
 			}
 		}
 		else
@@ -585,7 +587,7 @@ double DoublyLinkedList<Subway> :: getDataDifferenceBetweenTwoNodes(int start_in
 	if (start_index >= 0 && start_index <= size && destination_index >= 0 && destination_index <= size)
 		if (mode >= 1 && mode <= 3) {
 			// station menu will display 1. Titiwangsa....... 8. Chan Sow Lin. User can select two station (start and destination station) to compare.
-			// if user's selection is return route (Start: 8. Chan Sow Lin, Destination: Tititwangsa), need to do SWAPPING of index because programme traverse linked list from head node only
+			// if user's selection is return route (Start: 8. Chan Sow Lin, Destination: 1. Tititwangsa), need to do SWAPPING of index because programme traverse linked list from head node only
 			// since for e.g., Chan Sow Lin -> Titiwangsa has the same distance, fare, time as Titiwangsa -> Chan Sow Lin, SWAPPING will still produce correct result.
 			if (destination_index < start_index) {
 				int temp = destination_index;
