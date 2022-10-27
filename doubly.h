@@ -3,6 +3,7 @@
 
 # include <string>
 # include <stdexcept>
+# include <iomanip>  	// std::setprecision
 # include "subway.h"
 
 using namespace std;
@@ -47,6 +48,7 @@ class DoublyLinkedList {
 		}
 
 		void showBackward() {
+
 			if (size > 0) {
 				DoublyNode<T> *current = tail;
 				while (current != nullptr) {
@@ -360,8 +362,21 @@ class DoublyLinkedList {
 		//method overload, method body defined outside class
 		void updateNodeData(int index, double newData, int mode) {}
 
+		//method body defined outside class NEW
+		void updateNodeData(int index, string T::*member, string newData) {}
+
+		// method body defined outside class NEW
+		void updateNodeData(int index, double T::*member, double newData) {}
+
 		//method overload, method body defined outside class
 		double getDataDifferenceBetweenTwoNodes(int start_index, int destination_index, int mode) {return 0;}
+
+		// method body defined outside class NEW
+		void formatInfoTabsForTable(string info) {};
+
+		// method body defined outside class NEW
+		void showForwardAllInfoInTable() {};
+
 };
 
 // !!Not yet complete the different mode for each subway member
@@ -376,15 +391,17 @@ void DoublyLinkedList<Subway> :: showForward(int mode) {
 			else if (mode == 2)
 				cout << current->data.currentStationName << endl;
 			else if (mode == 3)
-				cout << current->data.travelFareBetweenNextStation<< " ";
+				cout << current->data.travelFareBetweenNextStation << " ";
 			else if (mode == 4)
-				cout << current->data.travelFareBetweenPreviousStation<< " ";
+				cout << current->data.travelFareBetweenPreviousStation << " ";
 			else if (mode == 5)
-				cout << current->data.travelTimeBetweenNextStation<< " ";
+				cout << current->data.travelTimeBetweenNextStation << " ";
 			else if (mode == 6)
-				cout << current->data.travelTimeBetweenNextStation<< " ";
+				cout << current->data.travelTimeBetweenNextStation << " ";
 			else if (mode == 7) 	// for selecting a station.
 				cout << opt << ". " <<  current->data.currentStationName << endl;
+			else if (mode == 8) 	// for selecting a station.
+				cout << current->data.nearbySightseeingSpots << " ";
 			current = current->next;
 			opt++;
 		}
@@ -454,7 +471,7 @@ void DoublyLinkedList<Subway> :: showNextNodesAfterIndex(int index) {
 		if (size > 1)
 			if (index >= 0 && index < size) {
 				if (index == size - 1)
-					cout << "None. It is LAST STOP" << endl;
+					cout << "None. It is END-OF-LINE" << endl;
 				if (index < size / 2) {
 					DoublyNode<Subway> *current = head;
 					for (int i = 0; i < index; i++)
@@ -490,7 +507,7 @@ void DoublyLinkedList<Subway> :: showPreviousNodesAfterIndex(int index) {
 		if (size > 1)
 			if (index >= 0 && index < size) {
 				if (index == 0)
-					cout << "None. It is LAST STOP" << endl;
+					cout << "None. It is END-OF-LINE" << endl;
 				else if (index < size / 2) {
 					DoublyNode<Subway> *current = head;
 					for (int i = 0; i < index; i++)
@@ -572,11 +589,18 @@ void DoublyLinkedList<Subway> :: updateNodeData(int index, double newData, int m
 		throw invalid_argument("Invalid mode provided. Mode between 1 to 4 only");
 }
 
-// only require this to change subway station name
+// only require this to update Subway member variable with string data type
 template<>
-void DoublyLinkedList<Subway> :: updateNodeData(int index, string newData) {
+void DoublyLinkedList<Subway> :: updateNodeData(int index, string Subway::*member, string newData) {
 	DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
-	ptr->data.currentStationName = newData;
+		ptr->data.*member = newData;	// *member: pointer-to-member concept
+}
+
+// only require this to update Subway member variable with double data type
+template<>
+void DoublyLinkedList<Subway> :: updateNodeData(int index, double Subway::*member, double newData) {
+	DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
+		ptr->data.*member = newData;	// *member: pointer-to-member concept
 }
 
 // only require this to compare distance, fare and time between two stations
@@ -617,7 +641,7 @@ double DoublyLinkedList<Subway> :: getDataDifferenceBetweenTwoNodes(int start_in
 
 // !!Not yet complete, need to sort member variables after subwayId
 template<>
-void  DoublyLinkedList<Subway> :: sortListAscending() {
+void DoublyLinkedList<Subway> :: sortListAscending() {
 	DoublyNode<Subway> *i, *j;
 	int temp;
 
@@ -635,6 +659,50 @@ void  DoublyLinkedList<Subway> :: sortListAscending() {
 	}
 }
 
+// to format tabs depending on length of string data for table view
+template<>
+void DoublyLinkedList<Subway> :: formatInfoTabsForTable(string info) {
+	if (info.length() < 8) {
+		cout << info << "\t\t\t";
+	}
+	else {
+		cout << info << "\t\t";
+	}
+}
 
+// to display all subway details in table view
+template<>
+void DoublyLinkedList<Subway> :: showForwardAllInfoInTable() {
+	if (size > 0) {
+		cout << "Subway ID\tCurrent Station Name\tPrevious Station Name\tNext Station Name\t"
+				<< "Distance To Prev.\tFare To Prev.\tTime To Prev.\t"
+				<< "Distance To Next.\tFare To Next.\tTime To Next.\t"
+				<< "Nearby Sigtseeing Spots"
+		<< endl;
+		cout << "================================================================================================================="
+				<< "================================================================================================================="
+				<< "================================================================================================================="
+		<< endl;
+		DoublyNode<Subway> *current = head;
+		while (current != nullptr) {
+			cout << current->data.subwayId << "\t\t";
+			formatInfoTabsForTable(current->data.currentStationName);
+			formatInfoTabsForTable(current->data.previousStationName);
+			formatInfoTabsForTable(current->data.nextStationName);
+			cout << setprecision(2) << fixed;	// shows two decimal places
+			cout << current->data.travelDistanceBetweenPreviousStation << "\t\t\t";
+			cout << current->data.travelFareBetweenPreviousStation << "\t\t";
+			cout << current->data.travelTimeBetweenPreviousStation << "\t\t";
+			cout << current->data.travelDistanceBetweenNextStation << "\t\t\t";
+			cout << current->data.travelFareBetweenNextStation << "\t\t";
+			cout << current->data.travelTimeBetweenNextStation << "\t\t";
+			cout << setprecision(0) << fixed;	// reset the setprecision output buffer to not affect following output
+			cout << current->data.nearbySightseeingSpots << endl;;
+			current = current->next;
+		}
+	}
+	else
+		cout << "The list is empty" << endl;
+}
 
 #endif
