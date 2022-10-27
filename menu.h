@@ -2,16 +2,12 @@
 #define MENU_H_
 
 # include <string>
-# include <limits>
 # include <iostream>
-# include <stdexcept>
-# include <cstddef>
-# include <windows.h>
-# include <unistd.h>
-# include <iomanip>
-# include <cctype>
-# include <algorithm>
-# include <regex>
+# include <stdexcept>	// cerr
+# include <windows.h>	// Sleep() for windows OS
+# include <unistd.h>	// Sleep() for Linux OS
+# include <iomanip>		// setprecision
+# include <regex>		// regex_match() and pattern (obj of regular expression)
 
 using namespace std;
 
@@ -38,9 +34,10 @@ public:
 		}
 	}
 
+	//https://stackoverflow.com/questions/7753976/regular-expression-for-numbers-without-leading-zeros
 	static bool isInteger(string user_input) {
-		// catch string with alphanumeric and whitespace characters, avert double values by catching period(.)
-		const regex pattern("^[-+]?[0-9]+$");	//	cond: optional -/+ sign in str begin, must be digit in str end
+		// allows zero or a valid non-zero integer only (for e.g, 009 not valid, 9 valid);
+		const regex pattern("^[-]?(0|[1-9][0-9]*)$");
 		if(! regex_match(user_input, pattern)) {
 			return false;
 		}
@@ -50,10 +47,11 @@ public:
 	}
 
 	// https://stackoverflow.com/questions/10516967/regexp-for-a-double
+	// modified pattern to match at most double with two decimal places
 	static bool isDouble(string user_input) {
-		// allows zero or a valid non-zero integer;
-		// catch string with alphanumeric and whitespace characters
-		const regex pattern("^[-+]?(0|([1-9][0-9]*))(\\.[0-9]+)?$");
+		// allows zero or a valid non-zero integer (for e.g, 009 not valid, 9 valid);
+		// allow double values, period(.)
+		const regex pattern("^[-]?(0|([1-9][0-9]*))(\\.[0-9]([0-9])?)?$");
 		if(! regex_match(user_input, pattern)) {
 			return false;
 		}
@@ -73,9 +71,10 @@ public:
 		}
 	}
 
-	static bool isValidStationName(string user_input) {
+	//https://stackoverflow.com/questions/15836681/regular-expression-to-allow-single-whitespace-between-words
+	static bool isValidString(string user_input) {	// for Station Name and Sigthseeing Spots
 		// only allow string with alphabets and either one space or hyphen between words or alphabet
-		const regex pattern("[A-Za-z]+([ -][A-Za-z]+)?");
+		const regex pattern("[A-Za-z]+([ -][A-Za-z]+)*");
 		if(! regex_match(user_input, pattern)) {
 			return false;
 		}
@@ -101,8 +100,8 @@ public:
 	}
 
 	static void recordAndValidateOption(int min_val, int max_val, string inputTitle = "option") {
+		cout << endl;
 		while (true) {
-			cout << endl;
 			cout << "Enter " + inputTitle + ": ";
 			string user_input;
 			// read user_input as string including whitespaces
