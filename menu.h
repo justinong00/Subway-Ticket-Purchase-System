@@ -136,13 +136,14 @@ public:
 
 	static void showAdminMenu() {
 		addHeader("Admin Menu", "Log Out");
-		cout << "1. Add New Subway Station" << endl;
-		cout << "2. Modify Subway Station Information" << endl;
-		cout << "3. View All Ticket Purchases" << endl;
-		cout << "4. Sort Ticket Purchase According To Passenger Name" << endl;
-		cout << "5. Search Customer Ticket Purchase" << endl;
-		cout << "6. Modify Customer Ticket Purchase" << endl;
-		cout << "7. Delete Customer Ticket Purchase" << endl;
+		cout << "1. View All Station Details" << endl;
+		cout << "2. Add New Subway Station" << endl;
+		cout << "3. Modify Subway Station Information" << endl;
+		cout << "4. View All Ticket Purchases" << endl;
+		cout << "5. Sort Ticket Purchase According To Passenger Name" << endl;
+		cout << "6. Search Customer Ticket Purchase" << endl;
+		cout << "7. Modify Customer Ticket Purchase" << endl;
+		cout << "8. Delete Customer Ticket Purchase" << endl;
 		recordAndValidateOption(0, 7);
 	}
 
@@ -153,8 +154,5 @@ public:
 	}
 
 };
-
-
-
 
 #endif

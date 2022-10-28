@@ -13,6 +13,11 @@ using namespace std;
 
 int Menu::option = 0;	// initializing static member variable from Menu class
 
+// https://stackoverflow.com/questions/33407444/restore-original-value-after-setprecision
+// https://stackoverflow.com/questions/19198550/what-is-the-point-of-streamsize-prec-cout-precision-and-the-following-lines
+// gets the default precision to allow manipulation of d.p and reset to default to precision
+streamsize ss = cout.precision();
+
 // https://stackoverflow.com/questions/63238594/how-to-change-object-property-based-on-function-parameter-c
 // pointer-to-member concept
 // Purpose: catch used data from existing nodes, like name, id, etc..
@@ -42,7 +47,7 @@ int main() {
 		lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
 		// CUSTOMER FUNCTIONALITY
-/*		while (true) {
+		while (true) {
 			CustomerMenu:	// label for goto
 			Menu::showCustomerMenu();
 			Menu::addSpace();
@@ -198,15 +203,17 @@ int main() {
 					// Travel Information From {Start Station} to {End Station}
 					Menu::addHeader("Travel Information From " + lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName + " to " + lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName, "Go Back");
 					Menu::addSubHeader("Travel Distance");
+					cout << setprecision(1) << fixed;		// shows one d.p
 					cout << lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 1) << " km" << endl;	// returns Travel Distance
 					cout << endl;
 					Menu::addSubHeader("Travel Expenses");
-					cout << setprecision(2) << fixed;	// show two decimal places, e.g., RM 4.50
+					cout << setprecision(2) << fixed;		// shows two d.p
 					cout << "RM " << lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 2) << endl;	// returns Travel Fare
 					cout << endl;
 					Menu::addSubHeader("Travel Time");
-					cout << setprecision(0) << fixed;	// reset the setprecision output buffer to not affect following output
+					cout << setprecision(1) << fixed;
 					cout << lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 3) << " mins" << endl;	// returns Travel Time
+					cout.precision(ss);					// resets to system's default precision
 
 					// Check Option For Final Menu
 					Menu::addExitMenu("Customer Menu");
@@ -219,17 +226,42 @@ int main() {
 						continue;
 				}
 			}
-		}*/
 
 
+
+			// Amine and/or Shaun continue here
+			// 4. Purchase A Ticket
+			else if (Menu::option == 4) {
+
+			}
+		}
+
+
+/*
 		// ADMIN FUNCTIONALITY
 		while (true) {
 			AdminMenu:
 			Menu::showAdminMenu();
 			Menu::addSpace();
 
-			// 1. Add New Subway Station
+			// 1. View All Station Details
 			if (Menu::option == 1) {
+				// Current Salak Selatan Line
+				Menu::addSubHeader("Current Salak Selatan Line");
+				cout << endl;
+				// Shows All Station Details according to Subway member variables (subway.h)
+				lst.showForwardAllInfoInTable();
+				// Check Option For Final Menu
+				Menu::addExitMenu("Admin Menu");
+				Menu::recordAndValidateOption(-1, -1);	// remove 0 for Go Back Previous since Exit is same page
+				Menu::addSpace();
+				continue;	// Exit to Admin Menu, technically its the same as Go Back Previous
+			}
+
+
+
+			// 2. Add New Subway Station
+			else if (Menu::option == 2) {
 				while (true) {
 					// Select New Station Location
 					Menu::addHeader("Select New Station Location", "Go Back");
@@ -322,7 +354,7 @@ int main() {
 							Menu::showErrorMsg("Invalid station name");
 							continue;
 						}
-						// assume stationName cannot be alphabet
+						// assume stationName cannot be alphabet and > 15 characters
 						if ( tempUserInput.length() < 2 || tempUserInput.length() > 15) {
 							Menu::showErrorMsg("Invalid station name (must be 2-15 characters)");
 							continue;
@@ -365,8 +397,8 @@ int main() {
 						// convert user input to double
 						stationDistToPrev = stod(tempUserInput);
 						// assume stationDistToPrev can be only 1-9999, catch out of range values
-						if ( ! Menu::isInBetween(1, 9999, stationDistToPrev) ) {
-							Menu::showErrorMsg("Distance out of range (1.0-9999 only)");
+						if ( ! Menu::isInBetween(0.1, 9999.0, stationDistToPrev) ) {
+							Menu::showErrorMsg("Distance out of range (0.1, 9999 only)");
 							continue;
 						}
 						// ! verified {New Station}'s Travel Distance To {First Station} || {Last Station} || {Previous Station}
@@ -397,8 +429,8 @@ int main() {
 							// convert user input to double
 							stationDistToNext = stod(tempUserInput);
 							// assume stationDistToNext can be only 1-9999, catch out of range values
-							if ( ! Menu::isInBetween(1, 9999, stationDistToNext) ) {
-								Menu::showErrorMsg("Distance out of range (1.0-9999 only)");
+							if ( ! Menu::isInBetween(0.1, 9999.0, stationDistToNext) ) {
+								Menu::showErrorMsg("Distance out of range (0.1-9999 only)");
 								continue;
 							}
 							// ! verified {New Station}'s Travel Distance To {Next Station}
@@ -434,8 +466,8 @@ int main() {
 						// convert user input to double
 						stationFareToPrev = stod(tempUserInput);
 						// assume stationFareToPrev can be only 1-9999, catch out of range values
-						if ( ! Menu::isInBetween(1, 9999, stationFareToPrev) ) {
-							Menu::showErrorMsg("Fare out of range (1.0-9999 only)");
+						if ( ! Menu::isInBetween(0.1, 9999.0, stationFareToPrev) ) {
+							Menu::showErrorMsg("Fare out of range (0.1-9999 only)");
 							continue;
 						}
 						// ! verified {New Station}'s Travel Fare To {First Station} || {Last Station} || {Previous Station}
@@ -466,8 +498,8 @@ int main() {
 							// convert user input to double
 							stationFareToNext = stod(tempUserInput);
 							// assume stationFareToNext can be only 1-9999, catch out of range values
-							if ( ! Menu::isInBetween(1, 9999, stationFareToNext) ) {
-								Menu::showErrorMsg("Fare out of range (1.0-9999 only)");
+							if ( ! Menu::isInBetween(0.1, 9999.0, stationFareToNext) ) {
+								Menu::showErrorMsg("Fare out of range (0.1-9999 only)");
 								continue;
 							}
 							// ! verified {New Station}'s Travel Fare To {Next Station}
@@ -503,8 +535,8 @@ int main() {
 						// convert user input to double
 						stationTimeToPrev = stod(tempUserInput);
 						// assume stationTimeToPrev can be only 1-9999, catch out of range values
-						if ( ! Menu::isInBetween(1, 9999, stationTimeToPrev) ) {
-							Menu::showErrorMsg("Time out of range (1.0-9999 only)");
+						if ( ! Menu::isInBetween(0.1, 9999.0, stationTimeToPrev) ) {
+							Menu::showErrorMsg("Time out of range (0.1-9999 only)");
 							continue;
 						}
 						// ! verified {New Station}'s Travel Time To {First Station} || {Last Station} || {Previous Station}
@@ -534,8 +566,8 @@ int main() {
 							// convert user input to double
 							stationTimeToNext = stod(tempUserInput);
 							// assume stationTimeToNext can be only 1-9999, catch out of range values
-							if ( ! Menu::isInBetween(1, 9999, stationTimeToNext) ) {
-								Menu::showErrorMsg("Time out of range (1.0-9999 only)");
+							if ( ! Menu::isInBetween(0.1, 9999.0, stationTimeToNext) ) {
+								Menu::showErrorMsg("Time out of range (0.1-9999 only)");
 								continue;
 							}
 							// ! verified {New Station}'s Travel Time To {Next Station}
@@ -594,8 +626,8 @@ int main() {
 								i--;
 								continue;
 							}
-							// assume sightseeingSpotName cannot be alphabet
-							if ( tempUserInput.length() == 1) {
+							// assume sightseeingSpotName cannot be alphabet and > 15 characters
+							if ( tempUserInput.length() < 2 || tempUserInput.length() > 15) {
 								Menu::showErrorMsg("Invalid sightseeing spot name (must be 2-15 characters)");
 								i--;
 								continue;
@@ -609,7 +641,7 @@ int main() {
 					if (! goBack) {
 						// remove last two characters from sightseeingSpots because of additional ", "
 						sightseeingSpots.erase(sightseeingSpots.length()-2);
-						 // FIRST UPDATE the data for the affected stations,
+						// FIRST UPDATE the data for the affected stations,
 						// THEN INSERT the new station to doubly linked list
 						if (selectNewStationLocationOpt == 1) {			// Add As First Station
 							// update the Ori First Station
@@ -662,10 +694,7 @@ int main() {
 							);
 						}
 						// message to notify admin user
-						cout << "\nCONGRATS.NEW STATION ADDED!\n" << endl;
-						// show updates subway list
-						Menu::addSubHeader("New Salak Selatan Line");
-						lst.showForwardAllInfoInTable();
+						cout << "\nCONGRATS. NEW STATION ADDED!" << endl;
 						// Check Option For Final Menu
 						Menu::addExitMenu("Admin Menu");
 						Menu::recordAndValidateOption(-1, 0);	// -1 Exit, 0 Go Back Previous
@@ -686,11 +715,198 @@ int main() {
 			}
 
 
-			// 2. Modify Subway Station Information
-			else if (Menu::option == 2) {
-				cerr << "Not Done. Pending.." << endl;
+
+			// 3. Modify Subway Station Information
+			else if (Menu::option == 3) {
+				while (true) {
+					// Select An Information To Modify
+					Menu::addHeader("Select An Information To Modify", "Go Back");
+					cout << "1. Station Name" << endl;
+					cout << "2. Travel Fare" << endl;
+					cout << "3. Travel Time" << endl;
+					Menu::recordAndValidateOption(0, 3);
+					Menu::addSpace();
+					// Check Select An Information To Modify Option
+					if (Menu::option == 0)		// Go Back to Admin Menu
+						break;
+
+					int selectAnInformationToModifyOpt = Menu::option;
+
+					while (true) {
+						if (selectAnInformationToModifyOpt == 1) {	// Modify 1. Station Name
+							// Select A Station
+							Menu::addHeader("Select A Station", "Go Back");
+							lst.showForward(7);
+							Menu::recordAndValidateOption(0, lst.getSize());
+						}
+						else {						// Modify 2. Travel Fare || 3. Travel Information
+							// Select A Route
+							Menu::addHeader("Select A Route", "Go Back");
+							Menu::addSubHeader("Between");
+							lst.showForwardEachNodeAndItsNextNode();
+							Menu::recordAndValidateOption(0, lst.getSize() - 1);	// -1 becasue for e.g, 7 routes from 8 stations
+						}
+
+						Menu::addSpace();
+						// Check Select A Station Option	(Modify 1. Station Name)
+						// OR
+						// Check Select A Route Option		(Modify 2. Travel Fare || 3. Travel Information)
+						if (Menu::option == 0)		// Go Back to Select An Information To Modify
+							break;
+
+						string tempUserInput, newStationName;
+						double newTravelFare, newTravelTime;
+						bool goBack = false;
+						if (selectAnInformationToModifyOpt == 1) {		// Modify 1. Station Name
+							// Current Station Information
+							Menu::addHeader("Current Station Information", "Go Back");
+							cout << "-> Original Name\t: " + lst.getNodeAtIndex(Menu::option - 1)->data.currentStationName << endl;
+							while (true) {
+								cout << "-> New Name\t\t: ";
+								// read user_input as string including whitespaces
+								getline(cin, tempUserInput);
+								// 0, Go Back Previous -> user abort
+								if ( Menu::isStringPureZero(tempUserInput) ) {
+									goBack = true;
+									Menu::addSpace();
+									break;	// Go Back to Select A Station
+								}
+								// only allow string with alphabets and either one space or hyphen between
+								if ( ! Menu::isValidString(tempUserInput) ) {
+									Menu::showErrorMsg("Invalid station name");
+									continue;
+								}
+								// assume New Station Name cannot be alphabet and > 15 characters
+								if ( tempUserInput.length() < 2 || tempUserInput.length() > 15) {
+									Menu::showErrorMsg("Invalid station name (must be 2-15 characters)");
+									continue;
+								}
+								// catch used Station Name from doubly linked list
+								if ( isTaken(tempUserInput, lst, &Subway::currentStationName) ) {
+									Menu::showErrorMsg("Station Name taken");
+									continue;
+								}
+								// ! verified New Station Name
+								newStationName = tempUserInput;
+								// message to notify admin user
+								cout << "\nCONGRATS. STATION NAME MODIFIED!" << endl;
+								// update the doubly linked list accordingly
+								lst.updateNodeData(Menu::option - 1, &Subway::currentStationName, newStationName);
+								if (Menu::option - 1 == 0)							// Modify First Station's Name		-> update following's station previousStationName
+									lst.updateNodeData(Menu::option, &Subway::previousStationName, newStationName);
+								else if (Menu::option - 1 == lst.getSize() - 1)		// Modify Last Station's Name		-> update preceeding's station nextStationName
+									lst.updateNodeData(Menu::option - 2, &Subway::nextStationName, newStationName);
+								else {												// Modify In Between Stations' Name	-> update both of the above
+									lst.updateNodeData(Menu::option, &Subway::previousStationName, newStationName);
+									lst.updateNodeData(Menu::option - 2, &Subway::nextStationName, newStationName);
+								}
+								break;
+							}
+						}
+						else {											// Modify 2. Travel Fare || 3. Travel Information
+							// Current Travel Information
+							Menu::addHeader("Current Travel Information", "Go Back");
+							Menu::addSubHeader(lst.getNodeAtIndex(Menu::option - 1)->data.currentStationName
+									+ " -> " + lst.getNodeAtIndex(Menu::option - 1)->data.nextStationName);
+
+							if (selectAnInformationToModifyOpt == 2) {	// Modify 2. Travel Fare
+								cout << setprecision(2) << fixed;	// show two d.p
+								cout << "-> Original Fare\t(RM) : " << lst.getNodeAtIndex(Menu::option - 1)->data.travelFareBetweenNextStation << endl;
+								cout.precision(ss);					// resets to system's default precision
+								while (true) {
+									cout << "-> New Fare\t\t(RM) : ";
+									// read user_input as string including whitespaces
+									getline(cin, tempUserInput);
+									// 0, Go Back Previous -> user abort
+									if ( Menu::isStringPureZero(tempUserInput) ) {
+										goBack = true;
+										Menu::addSpace();
+										break;	// Go Back to Select A Route
+									}
+									// catch string with alphanumeric, whitespace and special characters, except '-' in the beginning or '.' after first digit
+									if ( ! Menu::isDouble(tempUserInput) ) {
+										Menu::showErrorMsg("Invalid input");
+										continue;
+									}
+									// convert user input to double
+									newTravelFare = stod(tempUserInput);
+									// assume New Travel Fare can be only 1-9999, catch out of range values
+									if ( ! Menu::isInBetween(0.1, 9999.0, newTravelFare) ) {
+										Menu::showErrorMsg("Fare out of range (0.1-9999 only)");
+										continue;
+									}
+									// ! verified New Travel Fare
+									// message to notify admin user
+									cout << "\nCONGRATS. TRAVEL FARE MODIFIED!" << endl;
+									// update the doubly linked list
+									// For e.g, Titiwangsa - PWTC affects two travel fares, next and previous
+									lst.updateNodeData(Menu::option - 1, &Subway::travelFareBetweenNextStation, newTravelFare);	// update Titiwangsa's nextTravelFare
+									lst.updateNodeData(Menu::option, &Subway::travelFareBetweenPreviousStation, newTravelFare);	// update PWTC's previousTravelFare
+									break;
+								}
+							}
+							else {										// Modify 3. Travel Information
+								cout << setprecision(1) << fixed;	// show two d.p
+								cout << "-> Original Time\t(mins) : " << lst.getNodeAtIndex(Menu::option - 1)->data.travelTimeBetweenNextStation << endl;
+								cout.precision(ss);					// resets to system's default precision
+								while (true) {
+									cout << "-> New Time\t\t(mins) : ";
+									// read user_input as string including whitespaces
+									getline(cin, tempUserInput);
+									// 0, Go Back Previous -> user abort
+									if ( Menu::isStringPureZero(tempUserInput) ) {
+										goBack = true;
+										Menu::addSpace();
+										break;	// Go Back to Select A Route
+									}
+									// catch string with alphanumeric, whitespace and special characters, except '-' in the beginning or '.' after first digit
+									if ( ! Menu::isDouble(tempUserInput) ) {
+										Menu::showErrorMsg("Invalid input");
+										continue;
+									}
+									// convert user input to double
+									newTravelTime = stod(tempUserInput);
+									// assume New Travel Time can be only 0.1-9999, catch out of range values
+									if ( ! Menu::isInBetween(0.1, 9999.0, newTravelTime) ) {
+										Menu::showErrorMsg("Fare out of range (0.1-9999 only)");
+										continue;
+									}
+									// ! verified New Travel Time
+									// message to notify admin user
+									cout << "\nCONGRATS. TRAVEL TIME MODIFIED!" << endl;
+									// update the doubly linked list
+									// For e.g, Titiwangsa - PWTC affects two travel times, next and previous
+									lst.updateNodeData(Menu::option - 1, &Subway::travelTimeBetweenNextStation, newTravelTime);	// update Titiwangsa's nextTravelTime
+									lst.updateNodeData(Menu::option, &Subway::travelTimeBetweenPreviousStation, newTravelTime);	// update PWTC's previousTravelTime
+									break;
+								}
+							}
+						}
+						if (! goBack) {
+							// Check Option For Final Menu (Current Station Information Or Current Travel Information)
+							Menu::addExitMenu("Admin Menu");
+							Menu::recordAndValidateOption(-1, 0);	// -1 Exit, 0 Go Back Previous
+							Menu::addSpace();
+							if (Menu::option == -1)
+								goto AdminMenu;		// Exit to Admin Menu
+							else
+								continue;			// Go Back to Select A Station Or Select A Route
+						}
+						else
+							continue;
+					}
+				}
 			}
-		}	// comment here
+
+
+
+			// Amine and/or Shaun continue here
+			// 4. View All Ticket Purchases
+			else if (Menu::option == 4) {
+
+			}
+		}	// comment here to comment All Admin Functionalities
+*/
 	}
 
 
@@ -700,4 +916,6 @@ int main() {
 	}
 	return 0;
 }
+
+
 
