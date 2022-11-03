@@ -163,6 +163,9 @@ public:
         }
     }
 
+    //Method overload, method body defined outside of class, NEW
+    int getIndex(string TransID){return 0;}
+
 private:
     LLNode<T> * atIndex(int index)
     {
@@ -191,6 +194,8 @@ private:
 //     }
 // }
 
+
+//To view all Transaction and Ticket Details (for admins)
 template<>
 void LinkedList<Ticket>::show()
 {
@@ -202,6 +207,24 @@ void LinkedList<Ticket>::show()
 				curr->val.getCusID() << "\t\t" << curr->val.getCusName() << "\t\t" << curr->val.getCusIC() << "\t\t" << curr->val.getTransDT();
 		curr=curr->next;
 	}
+}
+
+//To find the index of specific transaction using Transaction ID
+template<>
+int LinkedList<Ticket>::getIndex(string TransID){
+	int index=0;
+	LLNode<Ticket> * curr=head;
+	while (curr!=nullptr)
+	{
+		if(curr->val.getTrID()==TransID)
+		{
+			return index;
+		}
+		curr=curr->next;
+		index++;
+	}
+	//If Transaction not found
+	return -1;
 }
 
 #endif //DSTR_ASSIGNMENT_LINKEDLIST_H

@@ -291,9 +291,9 @@ int main() {
 					}
 					//If it is reversed
 					if ((endStationOpt-1) < (startStationOpt-1)) {
-						Min=lst.getDataDifferenceBetweenTwoNodes(startStationOpt-1,lst.getSize(), 3);
+						Min=Min+lst.getDataDifferenceBetweenTwoNodes(startStationOpt-1,lst.getSize(), 3);
 					}else{
-						Min=lst.getDataDifferenceBetweenTwoNodes(0,startStationOpt-1, 3);
+						Min=Min+lst.getDataDifferenceBetweenTwoNodes(0,startStationOpt-1, 3);
 					}
 					if(Min<ltm->tm_min){
 						Min=Min+30;
@@ -338,18 +338,49 @@ int main() {
 				}
 			}
 
-			//5. View Purchase History (this is supposed to be for Admin but the User has not been done yet so im testing here)
+			//5. View Purchase History & Delete (this is supposed to be for Admin but the User has not been done yet so im testing here)
 			else if (Menu::option==5){
 				while (true){
-					Menu::addHeader("Your Purchase History", "Go Back");
+					Menu::addHeader("Your Purchase History", "Delete a Transaction");
 					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
 					cout << setprecision(2) << fixed;
 					TLL.show();
 					cout.precision(ss);
 					Menu::addExitMenu("Customer Menu");
 					Menu::recordAndValidateOption(-1, 0);
-					Menu::addSpace();
+					if (Menu::option==-1){
+						Menu::addSpace();
+						goto CustomerMenu;
+					}else if (Menu::option==0){
+						cout << endl << "Enter Transaction ID to be Delete or 0 to cancel: " ;
+						string TransID;
+						int index;
+						cin >> TransID;
+						if (TransID=="0"){
+							Menu::addSpace();
+							goto CustomerMenu;
+						}else{
+							index = TLL.getIndex(TransID);
+							if (index == -1){
+								Menu::showErrorMsg("Transaction Does Not Exist");
+							}else{
+								TLL.deleteAt(index);
+								cout << endl << "Transaction Deleted";
+							}
+							Menu::addExitMenu("Customer Menu");
+							Menu::recordAndValidateOption(-1,0);
+							Menu::addSpace();
+							break;
+						}
+					}
 					break;
+				}
+			}
+
+			//6. Delete Purchase Transaction
+			else if (Menu::option==6){
+				while(true){
+
 				}
 			}
 		}
