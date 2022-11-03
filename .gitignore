@@ -44,6 +44,3 @@
 *.out
 *.app
 
-# Testing files
-main.cpp
-menu.h
