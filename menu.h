@@ -153,6 +153,14 @@ public:
         cout << "Enter -1 to \"Exit To " << menuTitle << "\"" << endl;
     }
 
+//  Added Menus
+    static void showMainMenu() {
+        addHeader("Main Menu", "Terminate");
+        cout << "1. Login" << endl;
+        cout << "2. Register" << endl;
+        recordAndValidateOption(0, 2);
+    }
+
 };
 
 #endif
