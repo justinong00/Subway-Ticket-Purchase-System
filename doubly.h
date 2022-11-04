@@ -281,78 +281,6 @@ class DoublyLinkedList {
 	    		throw invalid_argument("Invalid index provided");
 	    }
 
-	    void sortListAscending() {
-	    	DoublyNode<T> *i, *j;
-	    	T temp;
-
-	    	if (head == nullptr) {
-	    		throw runtime_error("The list is empty");
-	    	}
-	    	else {
-	    		for (i = head; i->next != nullptr; i = i->next)
-	    			for (j = i->next; j != nullptr; j = j->next)
-	    				if (i->data > j->data) {
-	    					temp = i->data;
-	    					i->data = j->data;
-	    					j->data = temp;
-	    				}
-	    	}
-	    }
-
-		void deleteBeginning() {
-			if (size > 0) {
-				DoublyNode<T> *current = head;
-				head = current->next;
-				current->next->prev = nullptr;
-				delete current;
-				size--;
-			}
-			else
-				throw runtime_error("The list is empty");
-		}
-
-		void deleteEnd() {
-			if (size > 0) {
-				DoublyNode<T> *current = tail;
-				tail = current->prev;
-				current->prev->next = nullptr;
-				delete current;
-				size--;
-			}
-			else
-				throw runtime_error("The list is empty");
-		}
-
-		void deleteItemAt(int index) {
-			if (index >= 0 && index < size)
-				if (index == 0)
-					deleteBeginning();
-				else if (index == size - 1)
-					deleteEnd();
-				else if (index < size / 2) {	// means index can be reached faster with head node
-					DoublyNode<T> *current = head;
-					for (int i = 0; i < index; i++)
-						current = current->next;
-
-					current->prev->next = current->next;
-					current->next->prev = current->prev;
-					delete current;
-					size --;
-				}
-				else {							// index closer to tail node
-					DoublyNode<T> *current = tail;
-					for (int i = 0; i < size - (index + 1); i++)		// size - (index + 1) to have the pointer land on the correct node (without it, will move one additional node)
-						current = current->prev;
-
-					current->prev->next = current->next;
-					current->next->prev = current->prev;
-					delete current;
-					size --;
-				}
-			else
-				throw invalid_argument("Invalid index provided");
-		}
-
 		// method overload, method body defined outside class
 		void showForward(int mode) {}
 
@@ -580,26 +508,6 @@ double DoublyLinkedList<Subway> :: getDataDifferenceBetweenTwoNodes(int start_in
 			throw invalid_argument("Invalid mode provided. Mode between 1 to 3 only");
 	else
 		throw invalid_argument("Invalid index provided");
-}
-
-// !!Not yet complete, need to sort member variables after subwayId
-template<>
-void DoublyLinkedList<Subway> :: sortListAscending() {
-	DoublyNode<Subway> *i, *j;
-	int temp;
-
-	if (head == nullptr) {
-		throw runtime_error("The list is empty");
-	}
-	else {
-		for (i = head; i->next != nullptr; i = i->next)
-			for (j = i->next; j != nullptr; j = j->next)
-				if (i->data.subwayId > j->data.subwayId) {
-					temp = i->data.subwayId;
-					i->data.subwayId = j->data.subwayId;
-					j->data.subwayId = temp;
-				}
-	}
 }
 
 // to format tabs depending on length of string data for table view

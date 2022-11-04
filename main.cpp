@@ -47,7 +47,7 @@ int main() {
 		lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
 		// CUSTOMER FUNCTIONALITY
-		while (true) {
+		/*while (true) {
 			CustomerMenu:	// label for goto
 			Menu::showCustomerMenu();
 			Menu::addSpace();
@@ -234,10 +234,9 @@ int main() {
 			else if (Menu::option == 4) {
 
 			}
-		}
+		}*/
 
 
-/*
 		// ADMIN FUNCTIONALITY
 		while (true) {
 			AdminMenu:
@@ -906,7 +905,6 @@ int main() {
 
 			}
 		}	// comment here to comment All Admin Functionalities
-*/
 	}
 
 
