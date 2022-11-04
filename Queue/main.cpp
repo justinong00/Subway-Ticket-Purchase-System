@@ -310,7 +310,12 @@ int main() {
 						Hour=Hour+1;
 					}
 					//Creates the Ticket class
-					string Dtime=to_string(Hour)+":"+to_string(Min);
+					string Dtime;
+					if (Min<10){
+						Dtime=to_string(Hour)+":0"+to_string(Min);
+					}else{
+						Dtime=to_string(Hour)+":"+to_string(Min);
+					}
 					Ticket T1=Ticket(TrID,TkID,lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName, lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName,
 							lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 2),Dtime);
 					Menu::addHeader("Ticket Details From " + lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName + " to " + lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName, "Cancel");
