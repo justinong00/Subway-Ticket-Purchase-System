@@ -142,7 +142,8 @@ public:
 		cout << "5. Sort Ticket Purchase According To Passenger Name" << endl;
 		cout << "6. Search Customer Ticket Purchase" << endl;
 		cout << "7. Modify Customer Ticket Purchase" << endl;
-		recordAndValidateOption(0, 6);
+		cout << "8. Flush Year old Transactions" << endl;
+		recordAndValidateOption(0, 8);
 	}
 
 	static void addExitMenu(string menuTitle) {

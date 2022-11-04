@@ -26,23 +26,21 @@ class Queue {
 	int count; //the number of elements in the queue
 public:
 	Queue() {
-		QueueFront = NULL;
-		QueueRear = NULL;
+		QueueFront = nullptr;
+		QueueRear = nullptr;
 		count = 0;
 	}
 	void enqueue(T elem) {
 		QueueNode<T> *newNode = new QueueNode<T>;
-		if (QueueRear == NULL) {
-			newNode->link = NULL;
-			QueueRear->link = newNode;
-			QueueFront = QueueRear;
-			count = count + 1;
-		} else {
-			newNode->link = NULL;
+		newNode->data=elem;
+		newNode->link=nullptr;
+		if (QueueRear == nullptr) {
+			QueueFront=QueueRear=newNode;
+		}else {
 			QueueRear->link = newNode;
 			QueueRear = newNode;
-			count = count + 1;
 		}
+		count++;
 	}
 	void dequeue() {
 		QueueNode<T> *Temp = QueueFront;
@@ -51,13 +49,9 @@ public:
 			return;
 		} else if (Temp->link != NULL) {
 			Temp = Temp->link;
-			cout << "Element deleted from queue is : " << QueueFront->data
-					<< endl;
 			QueueFront = Temp;
 			count = count - 1;
 		} else {
-			cout << "Element deleted from queue is : " << QueueFront->data
-					<< endl;
 			QueueFront = NULL;
 			QueueRear = NULL;
 			count = count - 1;
@@ -77,6 +71,13 @@ public:
 	}
 	int size() {
 		return count;
+	}
+	T getHead(){
+		if(QueueFront==nullptr){
+			cerr << "Queue is Empty" << endl;
+		}else{
+			return QueueFront->data;
+		}
 	}
 };
 

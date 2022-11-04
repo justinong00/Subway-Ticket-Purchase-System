@@ -43,15 +43,28 @@ int main() {
 		DoublyLinkedList<Subway> lst;
 		lst.insertAtEnd(Subway(101, "Titiwangsa", "END-OF-LINE", "PWTC", 0, 0, 0, 4, 0.4, 3, "Zoo Negara"));
 		lst.insertAtEnd(Subway(102, "PWTC     ", "Titiwangsa", "Sultan Ismail", 4, 0.4, 3, 8, 0.8, 7, "KLCC"));
-		lst.insertAtEnd(Subway(103, "Sultan Ismail", "PWTC", "Masjid Jamek", 8, 0.8, 7, 8, 0.8, 7, "Eco Park"));
+		lst.insertAtEnd(Subway(103, "Sultan Ismail", "PWTC", "Majlis Jamek", 8, 0.8, 7, 8, 0.8, 7, "Eco Park"));
 		lst.insertAtEnd(Subway(104, "Masjid Jamek", "Sultan Ismail", "Plaza Rakyat", 8, 0.8, 7, 6, 0.6, 5, "APU"));
-		lst.insertAtEnd(Subway(105, "Plaza Rakyat", "Masjid Jamek", "Hang Tuah", 6, 0.6, 5, 10, 1, 9, "Midvalley"));
+		lst.insertAtEnd(Subway(105, "Plaza Rakyat", "Majlis Jamek", "Hang Tuah", 6, 0.6, 5, 10, 1, 9, "Midvalley"));
 		lst.insertAtEnd(Subway(106, "Hang Tuah", "Plaza Rakyat", "Pudu", 10, 1, 9, 5, 0.5, 4, "Petronas Twin Towers"));
 		lst.insertAtEnd(Subway(107, "Pudu     ", "Hang Tuah", "Chan Sow Lin", 5, 0.5, 4, 5, 0.5, 4, "One Utama"));
 		lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
 		LinkedList<Ticket> TLL;
+		TLL.insertLast(Ticket("TR1","TK1","PWTC     ","Hang Tuah", 3.20,123, "Bobby", "980918059873", "Fri Nov 05 13:23:30 2021\n","13:33"));
+		TLL.insertLast(Ticket("TR2","TK2","Hang Tuah","Majlis Jamek", 1.60, 454, "Tommy", "870128039933", "Wed Nov 06 16:13:39 2021\n","16:38"));
+		TLL.insertLast(Ticket("TR3","TK3","Pudu     ","Majlis Jamek", 2.10,123, "Bobby", "980918059873", "Sun Nov 07 14:05:23 2021\n","14:34"));
+		TLL.insertLast(Ticket("TR4","TK4","Chan Sow Lin","Plaza Rakyat", 2.00, 321, "Sally", "011202023588", "Sun Nov 07 16:54:12 2021\n","17:00"));
+		TLL.insertLast(Ticket("TR5","TK5","Plaza Rakyat","Hang Tuah", 1.00, 321, "Sally", "011202023588", "Sun Nov 07 18:44:12 2021\n","18:52"));
 		// CUSTOMER FUNCTIONALITY
+
+		Queue<Ticket> q;
+		q.enqueue(Ticket("TR1","TK1","PWTC     ","Hang Tuah", 3.20, 123, "Bobby", "980918059873", "Fri Nov 05 13:23:30 2021\n","13:33"));
+		q.enqueue(Ticket("TR2","TK2","Hang Tuah","Majlis Jamek", 1.60, 454, "Tommy", "870128039933", "Wed Nov 06 16:13:39 2021\n","16:38"));
+		q.enqueue(Ticket("TR3","TK3","Pudu     ","Majlis Jamek", 2.10, 123, "Bobby", "980918059873", "Sun Nov 07 14:05:23 2021\n","14:34"));
+		q.enqueue(Ticket("TR4","TK4","Chan Sow Lin","Plaza Rakyat", 2.00, 321, "Sally", "011202023588", "Sun Nov 07 16:54:12 2021\n","17:00"));
+		q.enqueue(Ticket("TR5","TK5","Plaza Rakyat","Hang Tuah", 1.00, 321, "Sally", "011202023588", "Sun Nov 07 18:44:12 2021\n","18:52"));
+
 		while (true) {
 			CustomerMenu:	// label for goto
 			Menu::showCustomerMenu();
@@ -345,7 +358,11 @@ int main() {
 							Min=Min-60;
 							Hour=Hour+1;
 						}
-						cout << Hour << ":" << Min<<endl;
+						if(Min<10){
+							cout << Hour << ":0" << Min<<endl;
+						}else{
+							cout << Hour << ":" << Min << endl;
+						}
 						cout.precision(ss);
 						Menu::addExitMenu("Customer Menu and Confirm Ticket Purchase");
 						Menu::recordAndValidateOption(-1, 0);
@@ -353,6 +370,7 @@ int main() {
 						if (Menu::option==-1){
 							cout << "Ticket Purchased"<<endl<<endl;
 							TLL.insertLast(T1);
+							q.enqueue(T1);
 							break;
 						}
 						break;
@@ -367,9 +385,9 @@ int main() {
 			else if (Menu::option==5){
 				while (true){
 					Menu::addHeader("Your Purchase History", "Delete a Purchase");
-					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
 					cout << setprecision(2) << fixed;
-					int CusID=626; // This is where Customer ID will get its variable (for now it was 626 for testing)
+					int CusID=321; // This is where Customer ID will get its variable (for now it was 626 for testing)
 					TLL.sortByTransID();
 					TLL.showByCusID(CusID); // Displays all purchase transaction of Customer
 					cout.precision(ss);
@@ -377,7 +395,7 @@ int main() {
 					Menu::recordAndValidateOption(-1, 0);
 					if (Menu::option==-1){
 						Menu::addSpace();
-						goto CustomerMenu;
+						break;
 					}else if (Menu::option==0){
 						//This is to delete a transaction
 						cout << endl << "Enter Transaction ID to be Delete or 0 to cancel: " ;
@@ -1082,7 +1100,7 @@ int main() {
 				while (true){
 					//Views all purchases and has an option to Delete a transaction
 					Menu::addHeader("All Ticket Purchase History", "Delete a Transaction");
-					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
 					cout << setprecision(2) << fixed;
 					//Sorts the list by the transaction ID and displays all
 					TLL.sortByTransID();
@@ -1126,7 +1144,7 @@ int main() {
 				while(true){
 					//Allows the admin to go back to menu if selected 0
 					Menu::addHeader("View Transactions based on Passenger Name", "Go back to Admin Menu");
-					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
 					cout << setprecision(2) << fixed;
 					TLL.sortNameAsc(); //Calls to sort the List in ascending order of Names
 					TLL.show(); //Displays the list
@@ -1141,7 +1159,7 @@ int main() {
 			else if (Menu::option == 6){
 				while(true){
 					Menu::addHeader("View Specific Customer Transactions", "Go back to Admin Menu");
-					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
 					cout << "Enter Customer ID: ";
 					string ID;
 					getline(cin, ID);
@@ -1163,7 +1181,7 @@ int main() {
 				while(true){
 					//First will show admin all purchases
 					Menu::addHeader("All Purchase History", "Modify a Transaction");
-					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
 					cout << setprecision(2) << fixed;
 					TLL.sortByTransID();
 					TLL.show();
@@ -1240,6 +1258,35 @@ int main() {
 							Menu::addExitMenu("Customer Menu");
 							Menu::recordAndValidateOption(-1, 0);
 							Menu::addSpace();
+						}
+					}else{
+						break;
+					}
+				}
+			}
+
+			//8. Flushing Queue and LL
+			else if (Menu::option==8){
+				while(true){
+					if (q.size()>0){
+					cout << "here" <<endl;
+					string TDateTime = q.getHead().getTransDT();
+					cout << "here now" <<endl;
+					string year = TDateTime.substr(TDateTime.size()-5);
+					time_t now = time(0);
+					tm *ltm = localtime(&now);
+					int cyear=1900+ltm->tm_year;
+					cout << year << endl << cyear <<endl;
+					if (stoi(year) < cyear){
+						cout << year<<endl;
+						cout << "Do i even reach here?" <<endl;
+						string tid = q.getHead().getTrID();
+						q.dequeue();
+						int index = TLL.getIndex(tid);
+						TLL.deleteAt(index);
+					}else{
+						cout << "Flushed all year old transactions" << endl;
+						break;
 						}
 					}else{
 						break;

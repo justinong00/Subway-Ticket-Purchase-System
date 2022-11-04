@@ -18,6 +18,19 @@ private:
 	int CusID;
 public:
 	Ticket() = default;
+
+	Ticket(string TrID, string TiID, string source, string dest, double amount, int cid, string cname, string cic, string tdt,string dT){
+		this->TransID=TrID;
+		this->TicketID=TiID;
+		this->Source=source;
+		this->Desti=dest;
+		this->TicAmount=amount;
+		this->CusID=cid;
+		this->CusName=cname;
+		this->CusIC=cic;
+		this->TransDT= tdt;
+		this->DepartT=dT;
+	}
 	Ticket(string TrID, string TiID, string source, string dest, double amount, string dT){
 		this->TransID=TrID;
 		this->TicketID=TiID;
