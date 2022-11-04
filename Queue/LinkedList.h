@@ -9,6 +9,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "Ticket.h"
+#include <string.h>
 
 using namespace std;
 
@@ -166,6 +167,18 @@ public:
     //Method overload, method body defined outside of class, NEW
     int getIndex(string TransID){return 0;}
 
+    //Method overload, method body defined outside of class
+    void showByCusID(int CusID){};
+
+    //Method overload, method body defiend outside of class
+    void sortNameAsc(){};
+
+    //Method overload, method body defined outside of class
+    void sortByTransID(){};
+
+    //Method overload, method body defined outside of class
+    void Modify(string TransID, string source, string dest, double amount, string dt){};
+
 private:
     LLNode<T> * atIndex(int index)
     {
@@ -203,15 +216,38 @@ void LinkedList<Ticket>::show()
 	while (curr != nullptr)
 	{
 		cout << curr->val.getTrID() << "\t\t" << curr->val.getTkID() << "\t\t" << curr->val.getSource() << "\t" << curr->val.getDest() << "\t"
-				<< curr->val.getAmount() << "\t\t" << curr->val.getDepartT() << "\t\t" <<
-				curr->val.getCusID() << "\t\t" << curr->val.getCusName() << "\t\t" << curr->val.getCusIC() << "\t\t" << curr->val.getTransDT();
+				<< curr->val.getAmount() << "\t\t" << curr->val.getDepartT() << "\t\t" <<curr->val.getCusID() << "\t\t" << curr->val.getCusName()
+				<< "\t\t" << curr->val.getCusIC() << "\t\t" << curr->val.getTransDT();
 		curr=curr->next;
+	}
+}
+
+//To view all Transaction and Ticket Details by Customer ID
+template<>
+void LinkedList<Ticket>::showByCusID(int CusID)
+{
+	bool found = false;
+	LLNode<Ticket> * curr = head;
+	while (curr != nullptr)
+	{
+		if (curr->val.getCusID()==CusID)
+		{
+			found=true;
+			cout << curr->val.getTrID() << "\t\t" << curr->val.getTkID() << "\t\t" << curr->val.getSource() << "\t" << curr->val.getDest() << "\t"
+					<< curr->val.getAmount() << "\t\t" << curr->val.getDepartT() << "\t\t" << curr->val.getCusID() << "\t\t" << curr->val.getCusName()
+					<< "\t\t" << curr->val.getCusIC() << "\t\t" << curr->val.getTransDT();
+		}
+		curr=curr->next;
+	}
+	if (found==false){
+		cerr << "Customer ID not found " <<endl;
 	}
 }
 
 //To find the index of specific transaction using Transaction ID
 template<>
-int LinkedList<Ticket>::getIndex(string TransID){
+int LinkedList<Ticket>::getIndex(string TransID)
+{
 	int index=0;
 	LLNode<Ticket> * curr=head;
 	while (curr!=nullptr)
@@ -225,6 +261,92 @@ int LinkedList<Ticket>::getIndex(string TransID){
 	}
 	//If Transaction not found
 	return -1;
+}
+
+//To sort the Ticket linked list in ascending order of Name
+template<>
+void LinkedList<Ticket>::sortNameAsc()
+{
+	LLNode<Ticket> * curr = new LLNode<Ticket>;
+	Ticket Temp;
+	LLNode<Ticket> * index = new LLNode<Ticket>;
+	if(head==nullptr)
+	{
+		return;
+	}else
+	{
+		for (curr = head; curr->next != nullptr; curr = curr->next)
+		{
+			for (index = curr->next; index != nullptr; index = index->next)
+			{
+				string str1 = curr->val.getCusName();
+				string str2 = index->val.getCusName() ;
+				int result = str1.compare(str2);
+				if(result>0)
+				{
+					Temp = curr->val;
+					curr->val = index->val;
+					index->val = Temp;
+				}
+			}
+		}
+	}
+}
+
+//To sort the Ticket Linked List in ascending order of Transaction ID
+template<>
+void LinkedList<Ticket>::sortByTransID()
+{
+	LLNode<Ticket> * curr = new LLNode<Ticket>;
+	Ticket Temp;
+	LLNode<Ticket> * index = new LLNode<Ticket>;
+	if(head==nullptr)
+	{
+		return;
+	}else
+	{
+		for (curr = head; curr->next != nullptr; curr = curr->next)
+		{
+			for (index = curr->next; index != nullptr; index = index->next)
+			{
+				string str1 = curr->val.getTrID();
+				string str2 = index->val.getTrID() ;
+				int result = str1.compare(str2);
+				if(result>0)
+				{
+					Temp = curr->val;
+					curr->val = index->val;
+					index->val = Temp;
+				}
+			}
+		}
+	}
+}
+
+
+//To Modify Ticket details
+template<>
+void LinkedList<Ticket>::Modify(string TransID, string source, string dest, double amount, string dt)
+{
+	bool found = false;
+	LLNode<Ticket> * curr = head;
+	while (curr != nullptr)
+	{
+		if(curr->val.getTrID()==TransID)
+		{
+			found=true;
+			curr->val.setSource(source);
+			curr->val.setDest(dest);
+			curr->val.setTAmount(amount);
+			curr->val.setDepartT(dt);
+			cout << "Ticket Details Modified" << endl;
+			break;
+		}
+		curr=curr->next;
+	}
+	if (found==false){
+		cerr << "Ticket Not Found" << endl;
+	}
 }
 
 #endif //DSTR_ASSIGNMENT_LINKEDLIST_H

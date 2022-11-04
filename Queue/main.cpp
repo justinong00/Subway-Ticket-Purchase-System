@@ -266,42 +266,50 @@ int main() {
 						endStationOpt = Menu::option;
 					Menu::addSpace();
 
-					//Creating the ticket class
 					string TrID, TkID;
 					int ID;
+					//To set the Transaction and Ticket ID
 					if(TLL.getSize()==0){
 						TrID="TR1";
 						TkID="TK1";
 					}else{
 						TrID=TLL.tail->val.getTrID();
-						ID=(TrID[2]-48)+1;
+						ID=(TrID[2]-48)+1; //Gets the ascii value of the number and minuses it by 48 and plus 1 to get the next ID
 						TrID="TR"+to_string(ID);
 						TkID=TLL.tail->val.getTkID();
 						ID=(TkID[2]-48)+1;
 						TkID="Tk"+to_string(ID);
 					}
+					//Getting the current time stamp to calculate the Departure and Transaction Time
 					time_t now=time(0);
 					tm *ltm=localtime(&now);
 					int Hour =ltm->tm_hour;
 					int Min = ltm->tm_min;
+					//If the current minute is past 30 minutes then we will set the minute to 30
 					if(Min>30){
 						Min=Min-(Min-30);
 					}else{
+						//Otherwise set the minute to 0
 						Min=Min-Min;
 					}
-					//If it is reversed
+					//If the station direction is the opposite
 					if ((endStationOpt-1) < (startStationOpt-1)) {
+						//Gets the time difference between the Start Station and the size of the subway linked list
 						Min=Min+lst.getDataDifferenceBetweenTwoNodes(startStationOpt-1,lst.getSize(), 3);
 					}else{
+						//Gets the time difference between the start and the start station
 						Min=Min+lst.getDataDifferenceBetweenTwoNodes(0,startStationOpt-1, 3);
 					}
+					//If the Minute is less than the current Minute time, 30 mins is added
 					if(Min<ltm->tm_min){
 						Min=Min+30;
 					}
+					//Adds an hour and minus 30 minutes from the time if them Minute value is more than 60
 					if(Min>60){
 						Min=Min-60;
 						Hour=Hour+1;
 					}
+					//Creates the Ticket class
 					string Dtime=to_string(Hour)+":"+to_string(Min);
 					Ticket T1=Ticket(TrID,TkID,lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName, lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName,
 							lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 2),Dtime);
@@ -311,8 +319,20 @@ int main() {
 					Menu::addProceedMenu("Adding Customer Information");
 					Menu::recordAndValidateOption(0, 1);
 					Menu::addSpace();
+					//Adding customer information
 					if (Menu::option == 1){
-						cout<<"Adding customer information"<<endl<<endl;	// After this is when i customer info is added
+						//Will change with user function
+						string cid, cn, cic;
+						cout << "Customer ID: ";
+						getline(cin, cid);
+						cout << "\nCustomer Name: ";
+						getline(cin, cn);
+						cout << "\nCustomer IC: ";
+						getline(cin, cic);
+						cout<<"Adding customer information"<<endl<<endl;
+						int CID = stoi(cid);
+						T1.setCusInfo(CID, cn, cic);
+						//Calculating the estimated current arrival time
 						Menu::addHeader("Estimated Current Arrival From " + lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName + " to " + lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName, "Cancel");
 						double RideTime=lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 3);
 						Min=Min+RideTime;
@@ -338,13 +358,15 @@ int main() {
 				}
 			}
 
-			//5. View Purchase History & Delete (this is supposed to be for Admin but the User has not been done yet so im testing here)
+			//5. View Purchase History
 			else if (Menu::option==5){
 				while (true){
-					Menu::addHeader("Your Purchase History", "Delete a Transaction");
+					Menu::addHeader("Your Purchase History", "Delete a Purchase");
 					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
 					cout << setprecision(2) << fixed;
-					TLL.show();
+					int CusID=626; // This is where Customer ID will get its variable (for now it was 626 for testing)
+					TLL.sortByTransID();
+					TLL.showByCusID(CusID); // Displays all purchase transaction of Customer
 					cout.precision(ss);
 					Menu::addExitMenu("Customer Menu");
 					Menu::recordAndValidateOption(-1, 0);
@@ -352,20 +374,28 @@ int main() {
 						Menu::addSpace();
 						goto CustomerMenu;
 					}else if (Menu::option==0){
+						//This is to delete a transaction
 						cout << endl << "Enter Transaction ID to be Delete or 0 to cancel: " ;
 						string TransID;
 						int index;
-						cin >> TransID;
-						if (TransID=="0"){
+						getline(cin, TransID);
+						if (TransID=="0"){ //IF 0 the system goes back to Customer Menus
 							Menu::addSpace();
 							goto CustomerMenu;
 						}else{
-							index = TLL.getIndex(TransID);
-							if (index == -1){
+							index = TLL.getIndex(TransID); //Finds index of transaction
+							if (index == -1){//Transaction Does Not exist
 								Menu::showErrorMsg("Transaction Does Not Exist");
+								continue;
 							}else{
+								if (TLL.get(index).getCusID()==CusID){
 								TLL.deleteAt(index);
 								cout << endl << "Transaction Deleted";
+								}else{
+									//Transaction Exists but it is not the Customers
+									cerr << endl << "You do not have that Transaction" <<endl;
+									continue;
+								}
 							}
 							Menu::addExitMenu("Customer Menu");
 							Menu::recordAndValidateOption(-1,0);
@@ -376,15 +406,7 @@ int main() {
 					break;
 				}
 			}
-
-			//6. Delete Purchase Transaction
-			else if (Menu::option==6){
-				while(true){
-
-				}
-			}
 		}
-
 
 /*
 		// ADMIN FUNCTIONALITY
@@ -1052,7 +1074,172 @@ int main() {
 			// Amine and/or Shaun continue here
 			// 4. View All Ticket Purchases
 			else if (Menu::option == 4) {
+				while (true){
+					//Views all purchases and has an option to Delete a transaction
+					Menu::addHeader("All Ticket Purchase History", "Delete a Transaction");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					cout << setprecision(2) << fixed;
+					//Sorts the list by the transaction ID and displays all
+					TLL.sortByTransID();
+					TLL.show();
+					cout.precision(ss);
+					Menu::addExitMenu("Admin Menu");
+					Menu::recordAndValidateOption(-1, 0);
+					//Admin selects to either delete a transaction or go back to the menu
+					if (Menu::option==-1){
+						Menu::addSpace();
+						goto AdminMenu;
+					}else if (Menu::option==0){
+						//Customer enters the Transaction ID to be deleted or can select to cancel deletion
+						cout << endl << "Enter Transaction ID to be Delete or 0 to cancel: " ;
+						string TransID;
+						int index;
+						getline(cin, TransID);
+						if (TransID=="0"){
+							Menu::addSpace();
+							goto AdminMenu;
+						}else{
+							index = TLL.getIndex(TransID);//Checks for the index of the transaction ID
+							if (index == -1){ // If the Transaction ID is not found
+								Menu::showErrorMsg("Transaction Does Not Exist");
+							}else{
+								TLL.deleteAt(index); // Deletes the Transaction ID
+								cout << endl << "Transaction Deleted";
+							}
+							Menu::addExitMenu("Admin Menu");
+							Menu::recordAndValidateOption(-1,0);
+							Menu::addSpace();
+							break;
+						}
+					}
+					break;
+				}
+			}
 
+			//5. Sort Ticket Purchase According To Passenger Name
+			else if (Menu::option == 5){
+				while(true){
+					//Allows the admin to go back to menu if selected 0
+					Menu::addHeader("View Transactions based on Passenger Name", "Go back to Admin Menu");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					cout << setprecision(2) << fixed;
+					TLL.sortNameAsc(); //Calls to sort the List in ascending order of Names
+					TLL.show(); //Displays the list
+					Menu::addExitMenu("Customer Menu");
+					Menu::recordAndValidateOption(-1,0);
+					Menu::addSpace();
+					break;
+				}
+			}
+
+			//6. Search Customer Ticket Purchase
+			else if (Menu::option == 6){
+				while(true){
+					Menu::addHeader("View Specific Customer Transactions", "Go back to Admin Menu");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					cout << "Enter Customer ID: ";
+					string ID;
+					getline(cin, ID);
+					int CusID = stoi(ID);
+					if (CusID==0){//Will go back to Admin menu if 0 is entered
+						break;
+					}else{
+						TLL.showByCusID(CusID);//Displays the Ticket purchases of specific customer
+						Menu::addExitMenu("Admin Menu");
+						Menu::recordAndValidateOption(-1,0);
+						Menu::addSpace();
+						break;
+					}
+				}
+			}
+
+			//7. Modify Customer Ticket Purchase
+			else if (Menu::option == 7){
+				while(true){
+					//First will show admin all purchases
+					Menu::addHeader("All Purchase History", "Modify a Transaction");
+					Menu::addSubHeader("Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \tTransaction Date and Time");
+					cout << setprecision(2) << fixed;
+					TLL.sortByTransID();
+					TLL.show();
+					cout.precision(ss);
+					Menu::addExitMenu("Customer Menu");
+					Menu::recordAndValidateOption(-1, 0); //Gives admin option to modify or go back
+					if (Menu::option == 0){
+						//Admin can select to cancel of enter transaction ID to modify
+						cout << endl << "Enter Transaction ID to be Delete or 0 to cancel: " ;
+						string TransID;
+						getline(cin, TransID);
+						//Check if the transaction exists
+						if (TLL.getIndex(TransID)==-1){
+							cerr << "Transaction not Found" << endl;
+							continue;
+						}else{
+							// Select Start And End Stations
+							int startStationOpt, endStationOpt;
+							Menu::addHeader("Select Start And End Stations", "Go Back");
+							lst.showForward(7);
+							// Check Select Start And End Stations Option
+							Menu::recordAndValidateOption(0, lst.getSize(), "Start Station");
+							cout << "got here" <<endl;
+							if (Menu::option == 0){		// Enter Start Station: 0, means want to Go Back to Customer Menu
+								Menu::addSpace();
+								break;
+							}
+							else
+								startStationOpt = Menu::option;
+							CustomerSelectEndStationMod:
+							Menu::recordAndValidateOption(0, lst.getSize(), "End Station");
+							cout << "Got here too" <<endl;
+							if (Menu::option == 0){		// Enter End Station: 0, means want to Go Back to Customer Menu
+								Menu::addSpace();
+								break;
+							}
+							// catch SAME Start and End Stations
+							else if (Menu::option == startStationOpt) {
+								cerr << ("To-And-From Same Station? Try Again") << endl;
+								Sleep(100);
+								goto CustomerSelectEndStationMod;
+							}
+							else
+								endStationOpt = Menu::option;
+							Menu::addSpace();
+
+							//Calculating the Departure time for the ticket
+							time_t now=time(0);
+							tm *ltm=localtime(&now);
+							int Hour =ltm->tm_hour;
+							int Min = ltm->tm_min;
+							if(Min>30){
+								Min=Min-(Min-30);
+							}else{
+								Min=Min-Min;
+							}
+							//If it is reversed
+							if ((endStationOpt-1) < (startStationOpt-1)) {
+								Min=Min+lst.getDataDifferenceBetweenTwoNodes(startStationOpt-1,lst.getSize(), 3);
+							}else{
+								Min=Min+lst.getDataDifferenceBetweenTwoNodes(0,startStationOpt-1, 3);
+							}
+							if(Min<ltm->tm_min){
+								Min=Min+30;
+							}
+							if(Min>60){
+								Min=Min-60;
+								Hour=Hour+1;
+							}
+							string Dtime=to_string(Hour)+":"+to_string(Min);
+							//Calling the modify function to modify the ticket
+							TLL.Modify(TransID, lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName, lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName,
+									lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1, 2), Dtime);
+							Menu::addExitMenu("Customer Menu");
+							Menu::recordAndValidateOption(-1, 0);
+							Menu::addSpace();
+						}
+					}else{
+						break;
+					}
+				}
 			}
 		}	// comment here to comment All Admin Functionalities
 */
@@ -1065,6 +1252,7 @@ int main() {
 	}
 	return 0;
 }
+
 
 
 

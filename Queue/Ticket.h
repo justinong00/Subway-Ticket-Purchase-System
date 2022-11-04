@@ -13,9 +13,9 @@
 using namespace std;
 class Ticket{
 private:
-	string TransID, TicketID, Source, Desti, CusID, CusName, CusIC, TransDT;
+	string TransID, TicketID, Source, Desti, CusName, CusIC, TransDT, DepartT;
 	double TicAmount;
-	string DepartT;
+	int CusID;
 public:
 	Ticket() = default;
 	Ticket(string TrID, string TiID, string source, string dest, double amount, string dT){
@@ -24,9 +24,9 @@ public:
 		this->Source=source;
 		this->Desti=dest;
 		this->TicAmount=amount;
-		this->CusID="Test1";
-		this->CusName="Test2";
-		this->CusIC="Test3";
+		this->CusID=0;
+		this->CusName="";
+		this->CusIC="";
 		time_t now=time(0);
 		char* dtnow = ctime(&now);
 		this->TransDT= dtnow;
@@ -53,7 +53,7 @@ public:
 	string getDepartT(){
 		return this->DepartT;
 	}
-	string getCusID(){
+	int getCusID(){
 		return this->CusID;
 	}
 	string getCusName(){
@@ -71,10 +71,10 @@ public:
 	void setTAmount(double amount){
 		this->TicAmount=amount;
 	}
-	void setDepartT(time_t dT){
+	void setDepartT(string dT){
 		this->DepartT=dT;
 	}
-	void setCusInfo(string id, string name, string ic){
+	void setCusInfo(int id, string name, string ic){
 		this->CusIC=ic;
 		this->CusID=id;
 		this->CusName=name;

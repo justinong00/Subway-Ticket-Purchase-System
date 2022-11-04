@@ -130,8 +130,7 @@ public:
 		cout << "3. Calculate Travel Information" << endl;
 		cout << "4. Purchase A Ticket" << endl;
 		cout << "5. View Purchase History" << endl;
-		cout << "6. Delete Purchase" << endl;
-		recordAndValidateOption(0, 6);
+		recordAndValidateOption(0, 5);
 	}
 
 	static void showAdminMenu() {
@@ -143,8 +142,7 @@ public:
 		cout << "5. Sort Ticket Purchase According To Passenger Name" << endl;
 		cout << "6. Search Customer Ticket Purchase" << endl;
 		cout << "7. Modify Customer Ticket Purchase" << endl;
-		cout << "8. Delete Customer Ticket Purchase" << endl;
-		recordAndValidateOption(0, 7);
+		recordAndValidateOption(0, 6);
 	}
 
 	static void addExitMenu(string menuTitle) {
