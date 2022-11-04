@@ -8,6 +8,8 @@
 //preprocessor directive
 #include <iostream>
 #include <stdexcept>
+#include "Customer.h"
+#include "Admin.h"
 
 using namespace std;
 
@@ -180,14 +182,34 @@ private:
     }
 };
 
-// template<> void LinkedList<Song>::show()
-// {
-//     LLNode<Song> * curr = head;
-//     while (curr != nullptr)
-//     {
-//         cout << curr->val.artist << ", " << curr->val.name << ", " << curr->val.genre << endl;
-//         curr = curr->next;
-//     }
-// }
+ template<> void LinkedList<Admin>::show()
+ {
+     LLNode<Admin> * curr = head;
+     while (curr != nullptr)
+     {
+         cout << curr->val.id << ", " << curr->val.username << ", " << curr->val.role.toString() << endl;
+         curr = curr->next;
+     }
+ }
+
+template<> void LinkedList<User>::show()
+{
+    LLNode<User> * curr = head;
+    while (curr != nullptr)
+    {
+        cout << curr->val.id << ", " << curr->val.username << ", " << curr->val.role.toString() << endl;
+        curr = curr->next;
+    }
+}
+
+template<> void LinkedList<Customer>::show()
+{
+    LLNode<Customer> * curr = head;
+    while (curr != nullptr)
+    {
+        cout << curr->val.id << ", " << curr->val.username << ", " << curr->val.role.toString() << endl;
+        curr = curr->next;
+    }
+}
 
 #endif //DSTR_ASSIGNMENT_LINKEDLIST_H

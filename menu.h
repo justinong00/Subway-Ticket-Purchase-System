@@ -130,7 +130,7 @@ public:
         cout << "3. Calculate Travel Information" << endl;
         cout << "4. Purchase A Ticket" << endl;
         cout << "5. View Purchase History" << endl;
-        cout << "6. Delete Purchase" << endl;
+        cout << "6. Edit Personal Details" << endl;
         recordAndValidateOption(0, 6);
     }
 
@@ -143,8 +143,10 @@ public:
         cout << "5. Sort Ticket Purchase According To Passenger Name" << endl;
         cout << "6. Search Customer Ticket Purchase" << endl;
         cout << "7. Modify Customer Ticket Purchase" << endl;
-        cout << "8. Delete Customer Ticket Purchase" << endl;
-        recordAndValidateOption(0, 7);
+        cout << "8. Approve Customer Transaction" << endl;
+        cout << "9. Register New Admin" << endl;
+        cout << "10. Edit Personal Details" << endl;
+        recordAndValidateOption(0, 10);
     }
 
     static void addExitMenu(string menuTitle) {
@@ -153,12 +155,33 @@ public:
         cout << "Enter -1 to \"Exit To " << menuTitle << "\"" << endl;
     }
 
-//  Added Menus
+    static void addProceedMenu(string menuTitle){
+        cout << endl;
+        cout << "=================================================================" << endl;
+        cout << "Enter 1 to \"Proceed To "<< menuTitle << "\"" << endl;
+    }
+
     static void showMainMenu() {
         addHeader("Main Menu", "Terminate");
         cout << "1. Login" << endl;
         cout << "2. Register" << endl;
         recordAndValidateOption(0, 2);
+    }
+
+    static void showLoginMenu() {
+        addHeader("Login Menu", "Back");
+//        TODO: receive inputs, validate inputs, call login() from User.h
+        cout << "Enter username: ";
+
+        string userInput;
+        getline(cin, userInput);
+
+        if (isInteger(userInput) && stoi(userInput) == 0) {
+            option = 0;
+            return;
+        }
+
+
     }
 
 };
