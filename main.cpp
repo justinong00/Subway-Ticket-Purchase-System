@@ -31,7 +31,6 @@ int main() {
 //            Login
             while (Menu::option == 1) {
                 boolean usernameIsValid = false;
-                boolean passwordIsValid = false;
                 string userInput;
                 User tempUser;
 
@@ -79,12 +78,11 @@ int main() {
                         continue;
                     }
 
-                    passwordIsValid = true;
                     user = tempUser;
                     break;
                 }
 
-                if ((Menu::option == 0) | passwordIsValid) break;
+                if ((Menu::option == 0) | !user.username.empty()) break;
             }
 
 //            Customer Registration
@@ -106,16 +104,19 @@ int main() {
 
                     if (Menu::isValidUsername(userInput) && !Menu::isInteger(userInput)) {
                         tempUser.username = userInput;
-                        cout << "valid username" << endl;
                         break;
                     }
 
                     Menu::showErrorMsg("Invalid username");
                     Menu::addSpace();
-                    continue;
                 }
 
                 while (!tempUser.username.empty()){
+                    string tempPassword;
+                    Menu::addHeader("Registration Menu", "Go Back");
+                    cout << "Enter password: ";
+
+                    getline(cin, tempPassword);
 
                 }
 
