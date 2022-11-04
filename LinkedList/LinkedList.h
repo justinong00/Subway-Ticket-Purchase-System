@@ -180,17 +180,11 @@ private:
         }
         return targetNode;
     }
-};
 
- template<> void LinkedList<Admin>::show()
- {
-     LLNode<Admin> * curr = head;
-     while (curr != nullptr)
-     {
-         cout << curr->val.id << ", " << curr->val.username << ", " << curr->val.role.toString() << endl;
-         curr = curr->next;
-     }
- }
+public:
+//    Method overload
+    User getByUsername(string username);
+};
 
 template<> void LinkedList<User>::show()
 {
@@ -202,14 +196,17 @@ template<> void LinkedList<User>::show()
     }
 }
 
-template<> void LinkedList<Customer>::show()
+template<>
+User LinkedList<User>::getByUsername(string username)
 {
-    LLNode<Customer> * curr = head;
-    while (curr != nullptr)
-    {
-        cout << curr->val.id << ", " << curr->val.username << ", " << curr->val.role.toString() << endl;
+    LLNode<User> * curr = head;
+    while (curr != nullptr) {
+        if (curr->val.username == username) {
+            return curr->val;
+        }
         curr = curr->next;
     }
+    return {};
 }
 
 #endif //DSTR_ASSIGNMENT_LINKEDLIST_H

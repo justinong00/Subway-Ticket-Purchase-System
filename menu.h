@@ -8,6 +8,7 @@
 # include <unistd.h>	// Sleep() for Linux OS
 # include <iomanip>		// setprecision
 # include <regex>		// regex_match() and pattern (obj of regular expression)
+#include "User.h"
 
 using namespace std;
 
@@ -96,7 +97,7 @@ public:
 
     static void showErrorMsg(string description) {
         cerr << description + ". Try Again\n" << endl;
-        Sleep(100);
+        Sleep(2000);
     }
 
     static void recordAndValidateOption(int min_val, int max_val, string inputTitle = "option") {
@@ -155,12 +156,14 @@ public:
         cout << "Enter -1 to \"Exit To " << menuTitle << "\"" << endl;
     }
 
+//    Shaun
     static void addProceedMenu(string menuTitle){
         cout << endl;
         cout << "=================================================================" << endl;
         cout << "Enter 1 to \"Proceed To "<< menuTitle << "\"" << endl;
     }
 
+//    Nigel
     static void showMainMenu() {
         addHeader("Main Menu", "Terminate");
         cout << "1. Login" << endl;
@@ -168,20 +171,14 @@ public:
         recordAndValidateOption(0, 2);
     }
 
-    static void showLoginMenu() {
-        addHeader("Login Menu", "Back");
-//        TODO: receive inputs, validate inputs, call login() from User.h
-        cout << "Enter username: ";
-
-        string userInput;
-        getline(cin, userInput);
-
-        if (isInteger(userInput) && stoi(userInput) == 0) {
-            option = 0;
-            return;
+    static bool isValidUsername(string userInput) {
+        const regex pattern("^[a-zA-Z0-9_]+$");
+        if(! regex_match(userInput, pattern)) {
+            return false;
         }
-
-
+        else {
+            return true;
+        }
     }
 
 };
