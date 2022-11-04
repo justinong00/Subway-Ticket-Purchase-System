@@ -8,7 +8,6 @@
 # include <unistd.h>	// Sleep() for Linux OS
 # include <iomanip>		// setprecision
 # include <regex>		// regex_match() and pattern (obj of regular expression)
-#include "User.h"
 
 using namespace std;
 
@@ -171,14 +170,9 @@ public:
         recordAndValidateOption(0, 2);
     }
 
-    static bool isValidUsername(string userInput) {
-        const regex pattern("^[a-zA-Z0-9_]+$");
-        if(! regex_match(userInput, pattern)) {
-            return false;
-        }
-        else {
-            return true;
-        }
+    static bool isStringOrZero(string userInput) {
+        if (isInteger(userInput) && stoi(userInput) == 0) {return true;}
+        return false;
     }
 
 };

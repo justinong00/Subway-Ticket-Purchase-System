@@ -9,12 +9,10 @@
 
 class Customer: public User {
 public:
-    string email;
 
     Customer() = default;
 
-    Customer(int id, string username, string password, string ic, string email) : User(id, username, password, ic){
-        this->email = email;
+    Customer(int id, string username, string password, string ic, string email) : User(id, username, password, ic, email){
         this->role = UserType::CustomerType;
     }
 };

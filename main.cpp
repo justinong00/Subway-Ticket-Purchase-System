@@ -15,21 +15,22 @@ int Menu::option = 0;
 
 int main() {
     try {
-        User user;
+        User user = {};
         LinkedList<User> userLst;
-        userLst.insertLast(Customer(1, "johndoe", "johndoe123", "1234", "johndoe@gmail.com"));
-        userLst.insertLast(Admin(2, "janedoe", "janedoe123", "2345"));
-        userLst.show();
+        userLst.insertLast(Customer(1, "johndoe", "johndoe123", "012345678901", "johndoe@gmail.com"));
+        userLst.insertLast(Admin(2, "janedoe", "janedoe123", "123456789012", "janedoe@gmail.com"));
 
         while (true) {
+
             MainMenu:
             Menu::showMainMenu();
+            Menu::addSpace();
             if (Menu::option == 0) break;
 
-            Menu::addSpace();
 
 //            Login
             while (Menu::option == 1) {
+                user = {};
                 boolean usernameIsValid = false;
                 string userInput;
                 User tempUser;
@@ -41,7 +42,7 @@ int main() {
 
                     getline(cin, userInput);
 
-                    if (Menu::isInteger(userInput) && stoi(userInput) == 0) {
+                    if (Menu::isStringOrZero(userInput)) {
                         Menu::option = 0;
                         Menu::addSpace();
                         break;
@@ -66,7 +67,7 @@ int main() {
 
                     getline(cin, userInput);
 
-                    if (Menu::isInteger(userInput) && stoi(userInput) == 0) {
+                    if (Menu::isStringOrZero(userInput)) {
                         Menu::option = 0;
                         Menu::addSpace();
                         break;
@@ -82,50 +83,176 @@ int main() {
                     break;
                 }
 
-                if ((Menu::option == 0) | !user.username.empty()) break;
+                if ((Menu::option == 0) | !user.username.empty()) {
+                    Menu::addSpace();
+                    break;
+                }
             }
 
 //            Customer Registration
             while (Menu::option == 2 && user.username.empty()) {
+                user = {};
                 User tempUser;
-                string userInput;
+                Customer newCustomer;
+                string userInput, tempUsername, tempEmail, tempIc;
 
+//                Username, Email, Ic
                 while (true) {
+//                    Enter username
                     Menu::addHeader("Registration Menu", "Go Back");
                     cout << "Enter username: ";
 
-                    getline(cin, userInput);
+                    getline(cin, tempUsername);
 
-                    if (Menu::isInteger(userInput) && stoi(userInput) == 0) {
+                    if (Menu::isStringOrZero(tempUsername)) {
                         Menu::option = 0;
                         Menu::addSpace();
                         break;
                     }
 
-                    if (Menu::isValidUsername(userInput) && !Menu::isInteger(userInput)) {
-                        tempUser.username = userInput;
+//                    Enter email
+                    cout << endl;
+                    cout << "Enter email: ";
+
+                    getline(cin, tempEmail);
+
+                    if (Menu::isStringOrZero(tempUsername)) {
+                        Menu::option = 0;
+                        Menu::addSpace();
                         break;
                     }
 
-                    Menu::showErrorMsg("Invalid username");
+//                    Enter ic
+                    cout << endl;
+                    cout << "Enter ic: ";
+
+                    getline(cin, tempIc);
+
+                    if (Menu::isStringOrZero(tempUsername)) {
+                        Menu::option = 0;
+                        Menu::addSpace();
+                        break;
+                    }
+
+//                    Username, Email, Ic validation
+                    if (!User::isValidUsername(tempUsername)) {
+                        Menu::showErrorMsg("Invalid username");
+                        Menu::addSpace();
+                        continue;
+                    }
+                    else if (!User::isValidEmail(tempEmail)) {
+                        Menu::showErrorMsg("Invalid email");
+                        Menu::addSpace();
+                        continue;
+                    }
+                    else if (!User::isValidIc(tempIc)) {
+                        Menu::showErrorMsg("Invalid ic");
+                        Menu::addSpace();
+                        continue;
+                    }
+
+//                    Check if records already exist
+                    tempUser = userLst.getByUsername(tempUsername);
+                    if (!tempUser.username.empty()) {
+                        Menu::showErrorMsg("Username already exists");
+                        Menu::addSpace();
+                        continue;
+                    }
+                    tempUser = userLst.getByEmail(tempEmail);
+                    cout << tempUser.email << endl;
+                    if (!tempUser.email.empty()) {
+                        Menu::showErrorMsg("Email is in use");
+                        Menu::addSpace();
+                        continue;
+                    }
+                    tempUser = userLst.getByIc(tempIc);
+                    if (!tempUser.ic.empty()) {
+                        Menu::showErrorMsg("Ic is in use");
+                        Menu::addSpace();
+                        continue;
+                    }
+
+
+                    newCustomer.username = tempUsername;
+                    newCustomer.email = tempEmail;
+                    newCustomer.ic = tempIc;
                     Menu::addSpace();
+                    break;
                 }
 
-                while (!tempUser.username.empty()){
+//                Password validation
+                while (!newCustomer.username.empty()){
                     string tempPassword;
                     Menu::addHeader("Registration Menu", "Go Back");
                     cout << "Enter password: ";
+                    getline(cin, userInput);
 
-                    getline(cin, tempPassword);
+                    if (Menu::isStringOrZero(userInput)) {
+                        Menu::option = 0;
+                        Menu::addSpace();
+                        break;
+                    }
 
+                    if (!User::isValidPassword(userInput)) {
+                        Menu::showErrorMsg("Invalid password");
+                        Menu::addSpace();
+                        continue;
+                    }
+
+                    tempPassword = userInput;
+                    Menu::addSpace();
+
+//                    Confirm password
+                    while (true) {
+                        Menu::addHeader("Registration Menu", "Go Back");
+                        cout << "Re-enter password: ";
+                        getline(cin, userInput);
+
+                        if (Menu::isStringOrZero(userInput)) {
+                            Menu::option = 0;
+                            Menu::addSpace();
+                            break;
+                        }
+
+                        if (tempPassword == userInput) {
+                            newCustomer.password = tempPassword;
+                            Menu::addSpace();
+                            break;
+                        }
+
+                        Menu::showErrorMsg("Passwords do not match");
+                        Menu::addSpace();
+                    }
+
+                    newCustomer.password = tempPassword;
+                    break;
                 }
 
-                if (Menu::option == 0) break;
+//                generate new id
+                newCustomer.id = (userLst.getLast().id + 1);
+
+                user = Customer(newCustomer.id, newCustomer.username, newCustomer.password, newCustomer.ic, newCustomer.email);
+                userLst.insertLast(user);
+                cout << user.role.toString() << endl;
+                if ((Menu::option == 0) | !user.username.empty()) {
+                    Menu::addSpace();
+                    break;
+                }
             }
 
-            if (!user.username.empty()) {
+            CustomerMenu:
+            while (user.role.isCustomer()) {
+                Menu::showCustomerMenu();
                 Menu::addSpace();
-                break;
+                if (Menu::option == 0) {break;}
+
+            }
+
+            AdminMenu:
+            while (user.role.isAdmin()) {
+                Menu::showAdminMenu();
+                Menu::addSpace();
+                if (Menu::option == 0) {break;}
             }
         }
 

@@ -184,6 +184,10 @@ private:
 public:
 //    Method overload
     User getByUsername(string username);
+
+    User getByIc(string ic);
+
+    User getByEmail(string email);
 };
 
 template<> void LinkedList<User>::show()
@@ -204,6 +208,35 @@ User LinkedList<User>::getByUsername(string username)
         if (curr->val.username == username) {
             return curr->val;
         }
+        curr = curr->next;
+    }
+    return {};
+}
+
+template<>
+User LinkedList<User>::getByIc(string ic)
+{
+    LLNode<User> * curr = head;
+    while (curr != nullptr) {
+        if (curr->val.ic == ic) {
+            return curr->val;
+        }
+        curr = curr->next;
+    }
+    return {};
+}
+
+template<>
+User LinkedList<User>::getByEmail(string email)
+{
+    LLNode<User> * curr = head;
+    while (curr != nullptr) {
+        if (curr->val.role.isAdmin()) {
+            curr = curr->next;
+            continue;
+        }
+
+        if (curr->val.email == email) {return curr->val;}
         curr = curr->next;
     }
     return {};
