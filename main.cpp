@@ -57,23 +57,23 @@ int main() {
         lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
         LinkedList<Ticket> TLL;
-        TLL.insertLast(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20, 123, "Bobby", "980918059873","Fri Nov 05 13:23:30 2021\n", "13:33"));
-        TLL.insertLast(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "Tommy", "870128039933","Wed Nov 06 16:13:39 2021\n", "16:38"));
-        TLL.insertLast(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 123, "Bobby", "980918059873","Sun Nov 07 14:05:23 2021\n", "14:34"));
-        TLL.insertLast(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "Sally", "011202023588","Sun Nov 07 16:54:12 2021\n", "17:00"));
-        TLL.insertLast(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "Sally", "011202023588","Sun Nov 07 18:44:12 2021\n", "18:52"));
+        TLL.insertLast(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20, 3, "bobby", "980918059873","Fri Nov 05 13:23:30 2021\n", "13:33"));
+        TLL.insertLast(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "tommy", "870128039933","Wed Nov 06 16:13:39 2021\n", "16:38"));
+        TLL.insertLast(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 3, "bobby", "980918059873","Sun Nov 07 14:05:23 2021\n", "14:34"));
+        TLL.insertLast(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "sally", "011202023588","Sun Nov 07 16:54:12 2021\n", "17:00"));
+        TLL.insertLast(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "sally", "011202023588","Sun Nov 07 18:44:12 2021\n", "18:52"));
         // CUSTOMER FUNCTIONALITY
 
         Queue<Ticket> q;
-        q.enqueue(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20, 123, "Bobby", "980918059873",
+        q.enqueue(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20,3, "bobby", "980918059873",
                          "Fri Nov 05 13:23:30 2021\n", "13:33"));
-        q.enqueue(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "Tommy", "870128039933",
+        q.enqueue(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "tommy", "870128039933",
                          "Wed Nov 06 16:13:39 2021\n", "16:38"));
-        q.enqueue(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 123, "Bobby", "980918059873",
+        q.enqueue(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 3, "bobby", "980918059873",
                          "Sun Nov 07 14:05:23 2021\n", "14:34"));
-        q.enqueue(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "Sally", "011202023588",
+        q.enqueue(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "sally", "011202023588",
                          "Sun Nov 07 16:54:12 2021\n", "17:00"));
-        q.enqueue(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "Sally", "011202023588",
+        q.enqueue(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "sally", "011202023588",
                          "Sun Nov 07 18:44:12 2021\n", "18:52"));
 
 
@@ -238,6 +238,7 @@ int main() {
 //                Password validation
                 while (!newCustomer.username.empty()) {
                     string tempPassword;
+                    tempPassword = "";
                     Menu::addHeader("Registration Menu", "Go Back");
                     cout << "Enter password: ";
                     getline(cin, userInput);
@@ -279,28 +280,40 @@ int main() {
                         Menu::addSpace();
                     }
 
+                    if (Menu::option == 0 && (tempPassword == "" | tempPassword.empty())) {
+                        break;
+                    }
+                    else if (Menu::option == 0) continue;
+
                     newCustomer.password = tempPassword;
                     break;
                 }
 
-//                generate new id
-                newCustomer.id = (userLst.getLast().id + 1);
+                if (!newCustomer.password.empty()) {
+//                    generate new id
+                    newCustomer.id = (userLst.getLast().id + 1);
 
-                user = Customer(newCustomer.id, newCustomer.username, newCustomer.password, newCustomer.ic,
-                                newCustomer.email);
-                userLst.insertLast(user);
-                Menu::showNotification("Account was registered successfully");
+                    user = Customer(newCustomer.id, newCustomer.username, newCustomer.password, newCustomer.ic,
+                                    newCustomer.email);
+                    userLst.insertLast(user);
+                    Menu::showNotification("Account was registered successfully");
+                    Menu::addSpace();
+                    break;
+                }
+
                 if ((Menu::option == 0) | !user.username.empty()) {
                     Menu::addSpace();
                     break;
                 }
             }
 
+            if (user.username.empty()) continue;
+
             CustomerMenu:
             while (user.role.isCustomer()) {
                 Menu::showCustomerMenu();
                 Menu::addSpace();
-                if (Menu::option == 0) { break; }
+                if (Menu::option == 0) break;
 
                 if (Menu::option == 1) {
                     while (true) {
@@ -592,16 +605,13 @@ int main() {
                         //Adding customer information
                         if (Menu::option == 1) {
                             //Will change with user function
-                            string cid, cn, cic;
-                            cout << "Customer ID: ";
-                            getline(cin, cid);
-                            cout << "\nCustomer Name: ";
-                            getline(cin, cn);
-                            cout << "\nCustomer IC: ";
-                            getline(cin, cic);
+                            string cn, cic;
+                            int cid;
+                            cic = user.ic;
+							cid = user.id;
+							cn = user.username;
                             cout << "Adding customer information" << endl << endl;
-                            int CID = stoi(cid);
-                            T1.setCusInfo(CID, cn, cic);
+                            T1.setCusInfo(cid, cn, cic);
                             //Calculating the estimated current arrival time
                             Menu::addHeader("Estimated Current Arrival From " +
                                             lst.getNodeAtIndex(startStationOpt - 1)->data.currentStationName + " to " +
@@ -642,7 +652,7 @@ int main() {
                         Menu::addSubHeader(
                                 "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
                         cout << setprecision(2) << fixed;
-                        int CusID = 321; // This is where Customer ID will get its variable (for now it was 626 for testing)
+                        int CusID = user.id; // This is where Customer ID will get its variable (for now it was 626 for testing)
                         TLL.sortByTransID();
                         TLL.showByCusID(CusID); // Displays all purchase transaction of Customer
                         cout.precision(ss);
@@ -807,7 +817,7 @@ int main() {
             while (user.role.isAdmin()) {
                 Menu::showAdminMenu();
                 Menu::addSpace();
-                if (Menu::option == 0) { break; }
+                if (Menu::option == 0) break;
 
                 if (Menu::option == 1) {
                     // Current Salak Selatan Line
@@ -1835,15 +1845,27 @@ int main() {
                             Menu::addSpace();
                         }
 
+                        if (Menu::option == 0 && (tempPassword == "" | tempPassword.empty())) {
+                            break;
+                        }
+                        else if (Menu::option == 0) continue;
+
+                        tempAdmin.password = tempPassword;
                         break;
                     }
 
-//                generate new id
-                    tempAdmin.id = (userLst.getLast().id + 1);
-                    Admin newAdmin = Admin(tempAdmin.id, tempAdmin.username, tempAdmin.password, tempAdmin.ic, tempAdmin.email);
-                    userLst.insertLast(newAdmin);
-                    Menu::showNotification("Account was registered successfully");
-                    if ((Menu::option == 0) | !newAdmin.password.empty()) {
+                    if (!tempAdmin.password.empty()) {
+//                    generate new id
+                        tempAdmin.id = (userLst.getLast().id + 1);
+
+                        Admin newAdmin = Admin(tempAdmin.id, tempAdmin.username, tempAdmin.password, tempAdmin.ic, tempAdmin.email);
+                        userLst.insertLast(newAdmin);
+                        Menu::showNotification("Account was registered successfully");
+                        Menu::addSpace();
+                        break;
+                    }
+
+                    if ((Menu::option == 0) | !tempAdmin.password.empty()) {
                         Menu::addSpace();
                         break;
                     }
@@ -1966,6 +1988,8 @@ int main() {
                     }
                 }
             }
+
+            user = {};
         }
     }
 
