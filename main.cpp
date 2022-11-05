@@ -47,7 +47,7 @@ int main() {
 		lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
 		// CUSTOMER FUNCTIONALITY
-		/*while (true) {
+/*		while (true) {
 			CustomerMenu:	// label for goto
 			Menu::showCustomerMenu();
 			Menu::addSpace();
@@ -80,7 +80,7 @@ int main() {
 					else {	// Menu::option == 2
 						Menu::addHeader("Order of Stations", "Go Back");
 						cout << "==START==" << endl;
-						lst.showBackward(2);
+						lst.showBackward();
 						cout << "==STOP==" << endl;
 						Menu::addExitMenu("Customer Menu");
 						Menu::recordAndValidateOption(-1, 0);	// -1 Exit, 0 Go Back Previous
