@@ -6,12 +6,13 @@
 # include <unistd.h>	// Sleep() for Linux OS
 # include <regex>
 # include <ctime>
-# include "subway.h"
-# include "doubly.h"
-# include "menu.h"
+
+# include "Doubly.h"
 # include "LinkedList.h"
+# include "Menu.h"
 # include "Ticket.h"
 # include "Queue.h"
+# include "Subway.h"
 
 using namespace std;
 
@@ -48,28 +49,28 @@ int main() {
 
         DoublyLinkedList<Subway> lst;
         lst.insertAtEnd(Subway(101, "Titiwangsa", "END-OF-LINE", "PWTC", 0, 0, 0, 4, 0.4, 3, "Zoo Negara"));
-        lst.insertAtEnd(Subway(102, "PWTC     ", "Titiwangsa", "Sultan Ismail", 4, 0.4, 3, 8, 0.8, 7, "KLCC"));
+        lst.insertAtEnd(Subway(102, "PWTC", "Titiwangsa", "Sultan Ismail", 4, 0.4, 3, 8, 0.8, 7, "KLCC"));
         lst.insertAtEnd(Subway(103, "Sultan Ismail", "PWTC", "Majlis Jamek", 8, 0.8, 7, 8, 0.8, 7, "Eco Park"));
         lst.insertAtEnd(Subway(104, "Masjid Jamek", "Sultan Ismail", "Plaza Rakyat", 8, 0.8, 7, 6, 0.6, 5, "APU"));
         lst.insertAtEnd(Subway(105, "Plaza Rakyat", "Majlis Jamek", "Hang Tuah", 6, 0.6, 5, 10, 1, 9, "Midvalley"));
         lst.insertAtEnd(Subway(106, "Hang Tuah", "Plaza Rakyat", "Pudu", 10, 1, 9, 5, 0.5, 4, "Petronas Twin Towers"));
-        lst.insertAtEnd(Subway(107, "Pudu     ", "Hang Tuah", "Chan Sow Lin", 5, 0.5, 4, 5, 0.5, 4, "One Utama"));
+        lst.insertAtEnd(Subway(107, "Pudu", "Hang Tuah", "Chan Sow Lin", 5, 0.5, 4, 5, 0.5, 4, "One Utama"));
         lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
         LinkedList<Ticket> TLL;
-        TLL.insertLast(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20, 3, "bobby", "980918059873","Fri Nov 05 13:23:30 2021\n", "13:33"));
+        TLL.insertLast(Ticket("TR1", "TK1", "PWTC", "Hang Tuah", 3.20, 3, "bobby", "980918059873","Fri Nov 05 13:23:30 2021\n", "13:33"));
         TLL.insertLast(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "tommy", "870128039933","Wed Nov 06 16:13:39 2021\n", "16:38"));
-        TLL.insertLast(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 3, "bobby", "980918059873","Sun Nov 07 14:05:23 2021\n", "14:34"));
+        TLL.insertLast(Ticket("TR3", "TK3", "Pudu", "Majlis Jamek", 2.10, 3, "bobby", "980918059873","Sun Nov 07 14:05:23 2021\n", "14:34"));
         TLL.insertLast(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "sally", "011202023588","Sun Nov 07 16:54:12 2021\n", "17:00"));
         TLL.insertLast(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "sally", "011202023588","Sun Nov 07 18:44:12 2021\n", "18:52"));
         // CUSTOMER FUNCTIONALITY
 
         Queue<Ticket> q;
-        q.enqueue(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20,3, "bobby", "980918059873",
+        q.enqueue(Ticket("TR1", "TK1", "PWTC", "Hang Tuah", 3.20,3, "bobby", "980918059873",
                          "Fri Nov 05 13:23:30 2021\n", "13:33"));
         q.enqueue(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "tommy", "870128039933",
                          "Wed Nov 06 16:13:39 2021\n", "16:38"));
-        q.enqueue(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 3, "bobby", "980918059873",
+        q.enqueue(Ticket("TR3", "TK3", "Pudu", "Majlis Jamek", 2.10, 3, "bobby", "980918059873",
                          "Sun Nov 07 14:05:23 2021\n", "14:34"));
         q.enqueue(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "sally", "011202023588",
                          "Sun Nov 07 16:54:12 2021\n", "17:00"));
