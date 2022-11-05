@@ -43,8 +43,8 @@ int main() {
         User user = {};
 
         LinkedList<User> userLst;
-        userLst.insertLast(Customer(1, "johndoe", "johndoe123", "012345678901", "johndoe@gmail.com"));
-        userLst.insertLast(Admin(2, "janedoe", "janedoe123", "123456789012", "janedoe@gmail.com"));
+        userLst.insertLast(Customer(1, "johndoe", "johnDoe123/", "012345678901", "johndoe@gmail.com"));
+        userLst.insertLast(Admin(2, "janedoe", "janeDoe123/", "123456789012", "janedoe@gmail.com"));
 
         DoublyLinkedList<Subway> lst;
         lst.insertAtEnd(Subway(101, "Titiwangsa", "END-OF-LINE", "PWTC", 0, 0, 0, 4, 0.4, 3, "Zoo Negara"));
@@ -57,16 +57,11 @@ int main() {
         lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
         LinkedList<Ticket> TLL;
-        TLL.insertLast(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20, 123, "Bobby", "980918059873",
-                              "Fri Nov 05 13:23:30 2021\n", "13:33"));
-        TLL.insertLast(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "Tommy", "870128039933",
-                              "Wed Nov 06 16:13:39 2021\n", "16:38"));
-        TLL.insertLast(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 123, "Bobby", "980918059873",
-                              "Sun Nov 07 14:05:23 2021\n", "14:34"));
-        TLL.insertLast(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "Sally", "011202023588",
-                              "Sun Nov 07 16:54:12 2021\n", "17:00"));
-        TLL.insertLast(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "Sally", "011202023588",
-                              "Sun Nov 07 18:44:12 2021\n", "18:52"));
+        TLL.insertLast(Ticket("TR1", "TK1", "PWTC     ", "Hang Tuah", 3.20, 123, "Bobby", "980918059873","Fri Nov 05 13:23:30 2021\n", "13:33"));
+        TLL.insertLast(Ticket("TR2", "TK2", "Hang Tuah", "Majlis Jamek", 1.60, 454, "Tommy", "870128039933","Wed Nov 06 16:13:39 2021\n", "16:38"));
+        TLL.insertLast(Ticket("TR3", "TK3", "Pudu     ", "Majlis Jamek", 2.10, 123, "Bobby", "980918059873","Sun Nov 07 14:05:23 2021\n", "14:34"));
+        TLL.insertLast(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "Sally", "011202023588","Sun Nov 07 16:54:12 2021\n", "17:00"));
+        TLL.insertLast(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "Sally", "011202023588","Sun Nov 07 18:44:12 2021\n", "18:52"));
         // CUSTOMER FUNCTIONALITY
 
         Queue<Ticket> q;
@@ -690,6 +685,122 @@ int main() {
                     }
                 }
 
+                else if (Menu::option == 6) {
+                    while (true) {
+                        string userInput;
+                        User tempUser;
+                        int userIndex;
+
+                        Menu::addHeader("Edit Personal Details", "Go Back");
+                        cout << "1. Change username" << endl;
+                        cout << "2. Change password" << endl;
+                        cout << "3. Change ic" << endl;
+                        cout << "4. Change email" << endl;
+                        Menu::recordAndValidateOption(0, 4);
+                        Menu::addSpace();
+
+                        if (Menu::option == 0) { break; }
+
+                        while (Menu::option <= 4 | Menu::option >= 1) {
+                            if (Menu::option == 1) {
+                                Menu::addHeader("Edit Personal Details - Change Username", "Go Back");
+                                cout << "Username: " << user.username << endl;
+                                cout << "Change to: ";
+                            }
+                            else if (Menu::option == 2) {
+                                Menu::addHeader("Edit Personal Details - Change password", "Go Back");
+                                cout << "Password: " << user.password << endl;
+                                cout << "Change to: ";
+                            }
+                            else if (Menu::option == 3) {
+                                Menu::addHeader("Edit Personal Details - Change ic", "Go Back");
+                                cout << "Ic: " << user.ic << endl;
+                                cout << "Change to: ";
+                            }
+                            else if (Menu::option == 4) {
+                                Menu::addHeader("Edit Personal Details - Change email", "Go Back");
+                                cout << "Email: " << user.email << endl;
+                                cout << "Change to: ";
+                            }
+
+                            getline(cin, userInput);
+
+                            if (Menu::isStringOrZero(userInput)) {
+                                Menu::option = 0;
+                                Menu::addSpace();
+                                break;
+                            }
+
+                            if (Menu::option == 1 && !User::isValidUsername(userInput)) {
+                                Menu::showErrorMsg("Invalid username");
+                                Menu::addSpace();
+                                continue;
+                            }
+                            else if (Menu::option == 2 && !User::isValidPassword(userInput)) {
+                                Menu::showErrorMsg("Invalid password");
+                                Menu::addSpace();
+                                continue;
+                            }
+                            else if (Menu::option == 3 && !User::isValidIc(userInput)) {
+                                Menu::showErrorMsg("Invalid ic");
+                                Menu::addSpace();
+                                continue;
+                            }
+                            else if (Menu::option == 4 && !User::isValidEmail(userInput)) {
+                                Menu::showErrorMsg("Invalid email");
+                                Menu::addSpace();
+                                continue;
+                            }
+
+
+                            if (Menu::option == 1) {
+                                tempUser = userLst.getByUsername(userInput);
+                                if (!tempUser.username.empty()) {
+                                    Menu::showErrorMsg("Username already exists");
+                                    Menu::addSpace();
+                                    continue;
+                                }
+
+                                user.username = userInput;
+                            }
+                            else if (Menu::option == 2) {
+                                user.password = userInput;
+                            }
+                            else if (Menu::option == 3) {
+                                tempUser = userLst.getByIc(userInput);
+                                if (!tempUser.ic.empty()) {
+                                    Menu::showErrorMsg("Ic is in use");
+                                    Menu::addSpace();
+                                    continue;
+                                }
+
+                                user.ic = userInput;
+                            }
+                            else if (Menu::option == 4) {
+                                tempUser = userLst.getByEmail(userInput);
+                                if (!tempUser.email.empty()) {
+                                    Menu::showErrorMsg("Username already exists");
+                                    Menu::addSpace();
+                                    continue;
+                                }
+
+                                user.email = userInput;
+                            }
+
+                            bool isModified = userLst.modify(user);
+                            if (isModified) {
+                                Menu::showNotification("Details have been updated");
+                                Menu::addSpace();
+                                break;
+                            }
+                            else {
+                                Menu::showErrorMsg("User not found");
+                                Menu::addSpace();
+                                continue;
+                            }
+                        }
+                    }
+                }
             }
 
             AdminMenu:
@@ -1589,6 +1700,255 @@ int main() {
                             }
                         } else {
                             break;
+                        }
+                    }
+                }
+
+                while (Menu::option == 9) {
+                    user = {};
+                    User tempUser;
+                    Admin tempAdmin;
+                    string userInput, tempUsername, tempEmail, tempIc;
+
+//                Username, Email, Ic
+                    while (true) {
+//                    Enter username
+                        Menu::addHeader("Admin Registration Menu", "Go Back");
+                        cout << "Enter username: ";
+
+                        getline(cin, tempUsername);
+
+                        if (Menu::isStringOrZero(tempUsername)) {
+                            Menu::option = 0;
+                            Menu::addSpace();
+                            break;
+                        }
+
+//                    Enter email
+                        cout << endl;
+                        cout << "Enter email: ";
+
+                        getline(cin, tempEmail);
+
+                        if (Menu::isStringOrZero(tempUsername)) {
+                            Menu::option = 0;
+                            Menu::addSpace();
+                            break;
+                        }
+
+//                    Enter ic
+                        cout << endl;
+                        cout << "Enter ic: ";
+
+                        getline(cin, tempIc);
+
+                        if (Menu::isStringOrZero(tempUsername)) {
+                            Menu::option = 0;
+                            Menu::addSpace();
+                            break;
+                        }
+
+//                    Username, Email, Ic validation
+                        if (!User::isValidUsername(tempUsername)) {
+                            Menu::showErrorMsg("Invalid username");
+                            Menu::addSpace();
+                            continue;
+                        } else if (!User::isValidEmail(tempEmail)) {
+                            Menu::showErrorMsg("Invalid email");
+                            Menu::addSpace();
+                            continue;
+                        } else if (!User::isValidIc(tempIc)) {
+                            Menu::showErrorMsg("Invalid ic");
+                            Menu::addSpace();
+                            continue;
+                        }
+
+//                    Check if records already exist
+//                    Only checks username for admin registration, email and ic can be duplicated.
+                        tempUser = userLst.getByUsername(tempUsername);
+                        if (!tempUser.username.empty()) {
+                            Menu::showErrorMsg("Username already exists");
+                            Menu::addSpace();
+                            continue;
+                        }
+
+                        tempAdmin.username = tempUsername;
+                        tempAdmin.email = tempEmail;
+                        tempAdmin.ic = tempIc;
+                        Menu::addSpace();
+                        break;
+                    }
+
+//                Password validation
+                    while (!tempAdmin.username.empty()) {
+                        string tempPassword;
+                        Menu::addHeader("Admin Registration Menu", "Go Back");
+                        cout << "Enter password: ";
+                        getline(cin, userInput);
+
+                        if (Menu::isStringOrZero(userInput)) {
+                            Menu::option = 0;
+                            Menu::addSpace();
+                            break;
+                        }
+
+                        if (!User::isValidPassword(userInput)) {
+                            Menu::showErrorMsg("Invalid password");
+                            Menu::addSpace();
+                            continue;
+                        }
+
+                        tempPassword = userInput;
+                        Menu::addSpace();
+
+//                    Confirm password
+                        while (true) {
+                            Menu::addHeader("Admin Registration Menu", "Go Back");
+                            cout << "Re-enter password: ";
+                            getline(cin, userInput);
+
+                            if (Menu::isStringOrZero(userInput)) {
+                                Menu::option = 0;
+                                Menu::addSpace();
+                                break;
+                            }
+
+                            if (tempPassword == userInput) {
+                                tempAdmin.password = tempPassword;
+                                Menu::addSpace();
+                                break;
+                            }
+
+                            Menu::showErrorMsg("Passwords do not match");
+                            Menu::addSpace();
+                        }
+
+                        break;
+                    }
+
+//                generate new id
+                    tempAdmin.id = (userLst.getLast().id + 1);
+                    Admin newAdmin = Admin(tempAdmin.id, tempAdmin.username, tempAdmin.password, tempAdmin.ic, tempAdmin.email);
+                    userLst.insertLast(newAdmin);
+                    if ((Menu::option == 0) | !newAdmin.password.empty()) {
+                        Menu::addSpace();
+                        break;
+                    }
+                }
+
+                if (Menu::option == 10) {
+                    while (true) {
+                        string userInput;
+                        User tempUser;
+                        int userIndex;
+
+                        Menu::addHeader("Edit Personal Details", "Go Back");
+                        cout << "1. Change username" << endl;
+                        cout << "2. Change password" << endl;
+                        cout << "3. Change ic" << endl;
+                        cout << "4. Change email" << endl;
+                        Menu::recordAndValidateOption(0, 4);
+                        Menu::addSpace();
+
+                        if (Menu::option == 0) { break; }
+
+                        while (Menu::option <= 4 | Menu::option >= 1) {
+                            if (Menu::option == 1) {
+                                Menu::addHeader("Edit Personal Details - Change Username", "Go Back");
+                                cout << "Username: " << user.username << endl;
+                                cout << "Change to: ";
+                            }
+                            else if (Menu::option == 2) {
+                                Menu::addHeader("Edit Personal Details - Change password", "Go Back");
+                                cout << "Password: " << user.password << endl;
+                                cout << "Change to: ";
+                            }
+                            else if (Menu::option == 3) {
+                                Menu::addHeader("Edit Personal Details - Change ic", "Go Back");
+                                cout << "Ic: " << user.ic << endl;
+                                cout << "Change to: ";
+                            }
+                            else if (Menu::option == 4) {
+                                Menu::addHeader("Edit Personal Details - Change email", "Go Back");
+                                cout << "Email: " << user.email << endl;
+                                cout << "Change to: ";
+                            }
+
+                            getline(cin, userInput);
+
+                            if (Menu::isStringOrZero(userInput)) {
+                                Menu::option = 0;
+                                Menu::addSpace();
+                                break;
+                            }
+
+                            if (Menu::option == 1 && !User::isValidUsername(userInput)) {
+                                Menu::showErrorMsg("Invalid username");
+                                Menu::addSpace();
+                                continue;
+                            }
+                            else if (Menu::option == 2 && !User::isValidPassword(userInput)) {
+                                Menu::showErrorMsg("Invalid password");
+                                Menu::addSpace();
+                                continue;
+                            }
+                            else if (Menu::option == 3 && !User::isValidIc(userInput)) {
+                                Menu::showErrorMsg("Invalid ic");
+                                Menu::addSpace();
+                                continue;
+                            }
+                            else if (Menu::option == 4 && !User::isValidEmail(userInput)) {
+                                Menu::showErrorMsg("Invalid email");
+                                Menu::addSpace();
+                                continue;
+                            }
+
+
+                            if (Menu::option == 1) {
+                                tempUser = userLst.getByUsername(userInput);
+                                if (!tempUser.username.empty()) {
+                                    Menu::showErrorMsg("Username already exists");
+                                    Menu::addSpace();
+                                    continue;
+                                }
+
+                                user.username = userInput;
+                            }
+                            else if (Menu::option == 2) {
+                                user.password = userInput;
+                            }
+                            else if (Menu::option == 3) {
+                                tempUser = userLst.getByIc(userInput);
+                                if (!tempUser.ic.empty()) {
+                                    Menu::showErrorMsg("Ic is in use");
+                                    Menu::addSpace();
+                                    continue;
+                                }
+
+                                user.ic = userInput;
+                            }
+                            else if (Menu::option == 4) {
+                                tempUser = userLst.getByEmail(userInput);
+                                if (!tempUser.email.empty()) {
+                                    Menu::showErrorMsg("Username already exists");
+                                    Menu::addSpace();
+                                    continue;
+                                }
+
+                                user.email = userInput;
+                            }
+
+                            bool isModified = userLst.modify(user);
+                            if (isModified) {
+                                Menu::showNotification("Details have been updated");
+                                Menu::addSpace();
+                                break;
+                            }
+                            else {
+                                Menu::showErrorMsg("User not found");
+                                Menu::addSpace();
+                                continue;
+                            }
                         }
                     }
                 }

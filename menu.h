@@ -96,7 +96,7 @@ public:
 
 	static void showErrorMsg(string description) {
 		cerr << description + ". Try Again\n" << endl;
-		Sleep(100);
+		Sleep(1500);
 	}
 
 	static void recordAndValidateOption(int min_val, int max_val, string inputTitle = "option") {
@@ -175,8 +175,13 @@ public:
     }
 
     static bool isStringOrZero(string userInput) {
-        if (isInteger(userInput) && stoi(userInput) == 0) {return true;}
+        if (isInteger(userInput) && userInput == "0") {return true;}
         return false;
+    }
+
+    static void showNotification(string description) {
+        cout << description + ".\n" << endl;
+        Sleep(1500);
     }
 };
 

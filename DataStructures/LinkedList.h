@@ -189,6 +189,9 @@ public:
 
     User getByEmail(string email);
 
+    bool modify(User user);
+
+
 private:
     LLNode<T> * atIndex(int index)
     {
@@ -205,6 +208,7 @@ private:
         }
         return targetNode;
     }
+
 };
 
 
@@ -405,6 +409,27 @@ User LinkedList<User>::getByEmail(string email)
         curr = curr->next;
     }
     return {};
+}
+
+template<>
+bool LinkedList<User>::modify(User user)
+{
+    bool isFound = false;
+    LLNode<User> * curr = head;
+    while (curr != nullptr)
+    {
+        if(curr->val.id == user.id)
+        {
+            isFound = true;
+            curr->val.username = user.username;
+            curr->val.password = user.password;
+            curr->val.ic = user.ic;
+            curr->val.email = user.email;
+            return isFound;
+        }
+        curr = curr->next;
+    }
+    return isFound;
 }
 
 
