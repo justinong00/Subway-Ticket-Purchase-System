@@ -341,7 +341,7 @@ int main() {
                         } else {    // Menu::option == 2
                             Menu::addHeader("Order of Stations", "Go Back");
                             cout << "==START==" << endl;
-                            lst.showBackward(2);
+                            lst.showBackward();
                             cout << "==STOP==" << endl;
                             Menu::addExitMenu("Customer Menu");
                             Menu::recordAndValidateOption(-1, 0);    // -1 Exit, 0 Go Back Previous
