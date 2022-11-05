@@ -74,7 +74,7 @@ int main() {
         q.enqueue(Ticket("TR4", "TK4", "Chan Sow Lin", "Plaza Rakyat", 2.00, 321, "sally", "011202023588",
                          "Sun Nov 07 16:54:12 2021\n", "17:00"));
         q.enqueue(Ticket("TR5", "TK5", "Plaza Rakyat", "Hang Tuah", 1.00, 321, "sally", "011202023588",
-                         "Sun Nov 07 18:44:12 2021\n", "18:52"));
+                                 "Sun Nov 07 18:44:12 2021\n", "18:52"));
 
 
         while (true) {
@@ -341,7 +341,7 @@ int main() {
                         } else {    // Menu::option == 2
                             Menu::addHeader("Order of Stations", "Go Back");
                             cout << "==START==" << endl;
-                            lst.showBackward(2);
+                            lst.showBackward();
                             cout << "==STOP==" << endl;
                             Menu::addExitMenu("Customer Menu");
                             Menu::recordAndValidateOption(-1, 0);    // -1 Exit, 0 Go Back Previous

@@ -281,99 +281,72 @@ class DoublyLinkedList {
 	    		throw invalid_argument("Invalid index provided");
 	    }
 
-	    void sortListAscending() {
-	    	DoublyNode<T> *i, *j;
-	    	T temp;
-
-	    	if (head == nullptr) {
-	    		throw runtime_error("The list is empty");
-	    	}
-	    	else {
-	    		for (i = head; i->next != nullptr; i = i->next)
-	    			for (j = i->next; j != nullptr; j = j->next)
-	    				if (i->data > j->data) {
-	    					temp = i->data;
-	    					i->data = j->data;
-	    					j->data = temp;
-	    				}
-	    	}
-	    }
-
-		void deleteBeginning() {
-			if (size > 0) {
-				DoublyNode<T> *current = head;
-				head = current->next;
-				current->next->prev = nullptr;
-				delete current;
-				size--;
-			}
-			else
-				throw runtime_error("The list is empty");
-		}
-
-		void deleteEnd() {
-			if (size > 0) {
-				DoublyNode<T> *current = tail;
-				tail = current->prev;
-				current->prev->next = nullptr;
-				delete current;
-				size--;
-			}
-			else
-				throw runtime_error("The list is empty");
-		}
-
-		void deleteItemAt(int index) {
-			if (index >= 0 && index < size)
-				if (index == 0)
-					deleteBeginning();
-				else if (index == size - 1)
-					deleteEnd();
-				else if (index < size / 2) {	// means index can be reached faster with head node
-					DoublyNode<T> *current = head;
-					for (int i = 0; i < index; i++)
-						current = current->next;
-
-					current->prev->next = current->next;
-					current->next->prev = current->prev;
-					delete current;
-					size --;
-				}
-				else {							// index closer to tail node
-					DoublyNode<T> *current = tail;
-					for (int i = 0; i < size - (index + 1); i++)		// size - (index + 1) to have the pointer land on the correct node (without it, will move one additional node)
-						current = current->prev;
-
-					current->prev->next = current->next;
-					current->next->prev = current->prev;
-					delete current;
-					size --;
-				}
-			else
-				throw invalid_argument("Invalid index provided");
-		}
-
 		// method overload, method body defined outside class
 		void showForward(int mode) {}
 
-		// method overload, method body defined outside class
-		void showBackward(int mode) {}
+		// update Subway member variables with string data type
+		void updateNodeData(int index, string T::*member, string newData) {
+			DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
+			ptr->data.*member = newData;	// *member: pointer-to-member concept
+		}
 
-		// method body defined outside class NEW
-		void updateNodeData(int index, string T::*member, string newData) {}
-
-		// method body defined outside class NEW
-		void updateNodeData(int index, double T::*member, double newData) {}
+		// update Subway member variables with double data type
+		void updateNodeData(int index, double T::*member, double newData) {
+			DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
+			ptr->data.*member = newData;	// *member: pointer-to-member concept
+		}
 
 		// method overload, method body defined outside class
 		double getDataDifferenceBetweenTwoNodes(int start_index, int destination_index, int mode) {return 0;}
 
-		// method body defined outside class NEW
-		void formatInfoTabsForTable(string info) {};
+		// to format tabs depending on length of string data for table view
+		void formatInfoTabsForTable(string info) {
+			if (info.length() < 8) {
+				cout << info << "\t\t\t";
+			}
+			else {
+				cout << info << "\t\t";
+			}
+		};
 
-		// method body defined outside class NEW
-		void showForwardAllInfoInTable() {};
-
+		// to display all subway details in table view
+		void showForwardAllInfoInTable() {
+			if (size > 0) {
+				cout << "Subway ID\tCurrent Station Name\tPrevious Station Name\tNext Station Name\t"
+						<< "Distance To Prev.\tFare To Prev.\tTime To Prev.\t"
+						<< "Distance To Next.\tFare To Next.\tTime To Next.\t"
+						<< "Nearby Sigthseeing Spots"
+				<< endl;
+				cout << "================================================================================================================="
+						<< "================================================================================================================="
+						<< "================================================================================================================="
+				<< endl;
+				DoublyNode<Subway> *current = head;
+				while (current != nullptr) {
+					cout << current->data.subwayId << "\t\t";
+					formatInfoTabsForTable(current->data.currentStationName);
+					formatInfoTabsForTable(current->data.previousStationName);
+					formatInfoTabsForTable(current->data.nextStationName);
+					streamsize ss = cout.precision();	// assign system's default precision to ss
+					cout << setprecision(1) << fixed;	// shows one d.p.
+					cout << current->data.travelDistanceBetweenPreviousStation << "\t\t\t";
+					cout << setprecision(2) << fixed;	// shows two d.p.
+					cout << current->data.travelFareBetweenPreviousStation << "\t\t";
+					cout << setprecision(1) << fixed;	// resets to show one d.p.
+					cout << current->data.travelTimeBetweenPreviousStation << "\t\t";
+					cout << current->data.travelDistanceBetweenNextStation << "\t\t\t";
+					cout << setprecision(2) << fixed;	// resets to show two d.p.
+					cout << current->data.travelFareBetweenNextStation << "\t\t";
+					cout << setprecision(1) << fixed;	// resets to show one d.p.
+					cout << current->data.travelTimeBetweenNextStation << "\t\t";
+					cout.precision(ss);					// resets to system's default precision
+					cout << current->data.nearbySightseeingSpots << endl;;
+					current = current->next;
+				}
+			}
+			else
+				cout << "The list is empty" << endl;
+		};
 };
 
 // mode 1 -> subwayId, mode 2 -> currentStationName, mode 3 -> travelFareBetweenNextStation
@@ -385,18 +358,8 @@ void DoublyLinkedList<Subway> :: showForward(int mode) {
 		DoublyNode<Subway> *current = head;
 		int opt = 1;
 		while (current != nullptr) {
-			if (mode == 1)
-				cout << current->data.subwayId << endl;
-			else if (mode == 2)
+			if (mode == 2)
 				cout << current->data.currentStationName << endl;
-			else if (mode == 3)
-				cout << current->data.travelFareBetweenNextStation << endl;
-			else if (mode == 4)
-				cout << current->data.travelFareBetweenPreviousStation << endl;
-			else if (mode == 5)
-				cout << current->data.travelTimeBetweenNextStation << endl;
-			else if (mode == 6)
-				cout << current->data.travelTimeBetweenNextStation << endl;
 			else if (mode == 7) 	// for selecting a station.
 				cout << opt << ". " <<  current->data.currentStationName << endl;
 			current = current->next;
@@ -409,14 +372,11 @@ void DoublyLinkedList<Subway> :: showForward(int mode) {
 
 // mode 1 -> subwayId, mode2 -> currentStationName
 template<>
-void DoublyLinkedList<Subway> :: showBackward(int mode) {
+void DoublyLinkedList<Subway> :: showBackward() {
 	if (size > 0) {
 		DoublyNode<Subway> *current = tail;
 		while (current != nullptr) {
-			if (mode == 1)
-				cout << current->data.subwayId << " ";
-			if (mode == 2)
-				cout << current->data.currentStationName << endl;
+			cout << current->data.currentStationName << endl;
 			current = current->prev;
 		}
 	}
@@ -532,20 +492,6 @@ void DoublyLinkedList<Subway> :: showPreviousNodesAfterIndex(int index) {
 		throw runtime_error("The list is empty");
 }
 
-// only require this to update Subway member variables with string data type
-template<>
-void DoublyLinkedList<Subway> :: updateNodeData(int index, string Subway::*member, string newData) {
-	DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
-		ptr->data.*member = newData;	// *member: pointer-to-member concept
-}
-
-// only require this to update Subway member variables with double data type
-template<>
-void DoublyLinkedList<Subway> :: updateNodeData(int index, double Subway::*member, double newData) {
-	DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
-		ptr->data.*member = newData;	// *member: pointer-to-member concept
-}
-
 // only require this to compare distance, fare and time between two stations
 template<>
 double DoublyLinkedList<Subway> :: getDataDifferenceBetweenTwoNodes(int start_index, int destination_index, int mode) {
@@ -580,77 +526,6 @@ double DoublyLinkedList<Subway> :: getDataDifferenceBetweenTwoNodes(int start_in
 			throw invalid_argument("Invalid mode provided. Mode between 1 to 3 only");
 	else
 		throw invalid_argument("Invalid index provided");
-}
-
-// !!Not yet complete, need to sort member variables after subwayId
-template<>
-void DoublyLinkedList<Subway> :: sortListAscending() {
-	DoublyNode<Subway> *i, *j;
-	int temp;
-
-	if (head == nullptr) {
-		throw runtime_error("The list is empty");
-	}
-	else {
-		for (i = head; i->next != nullptr; i = i->next)
-			for (j = i->next; j != nullptr; j = j->next)
-				if (i->data.subwayId > j->data.subwayId) {
-					temp = i->data.subwayId;
-					i->data.subwayId = j->data.subwayId;
-					j->data.subwayId = temp;
-				}
-	}
-}
-
-// to format tabs depending on length of string data for table view
-template<>
-void DoublyLinkedList<Subway> :: formatInfoTabsForTable(string info) {
-	if (info.length() < 8) {
-		cout << info << "\t\t\t";
-	}
-	else {
-		cout << info << "\t\t";
-	}
-}
-
-// to display all subway details in table view
-template<>
-void DoublyLinkedList<Subway> :: showForwardAllInfoInTable() {
-	if (size > 0) {
-		cout << "Subway ID\tCurrent Station Name\tPrevious Station Name\tNext Station Name\t"
-				<< "Distance To Prev.\tFare To Prev.\tTime To Prev.\t"
-				<< "Distance To Next.\tFare To Next.\tTime To Next.\t"
-				<< "Nearby Sigthseeing Spots"
-		<< endl;
-		cout << "================================================================================================================="
-				<< "================================================================================================================="
-				<< "================================================================================================================="
-		<< endl;
-		DoublyNode<Subway> *current = head;
-		while (current != nullptr) {
-			cout << current->data.subwayId << "\t\t";
-			formatInfoTabsForTable(current->data.currentStationName);
-			formatInfoTabsForTable(current->data.previousStationName);
-			formatInfoTabsForTable(current->data.nextStationName);
-			streamsize ss = cout.precision();	// assign system's default precision to ss
-			cout << setprecision(1) << fixed;	// shows one d.p.
-			cout << current->data.travelDistanceBetweenPreviousStation << "\t\t\t";
-			cout << setprecision(2) << fixed;	// shows two d.p.
-			cout << current->data.travelFareBetweenPreviousStation << "\t\t";
-			cout << setprecision(1) << fixed;	// resets to show one d.p.
-			cout << current->data.travelTimeBetweenPreviousStation << "\t\t";
-			cout << current->data.travelDistanceBetweenNextStation << "\t\t\t";
-			cout << setprecision(2) << fixed;	// resets to show two d.p.
-			cout << current->data.travelFareBetweenNextStation << "\t\t";
-			cout << setprecision(1) << fixed;	// resets to show one d.p.
-			cout << current->data.travelTimeBetweenNextStation << "\t\t";
-			cout.precision(ss);					// resets to system's default precision
-			cout << current->data.nearbySightseeingSpots << endl;;
-			current = current->next;
-		}
-	}
-	else
-		cout << "The list is empty" << endl;
 }
 
 #endif
