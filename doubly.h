@@ -275,13 +275,13 @@ class DoublyLinkedList {
 
 		// update member variables with string data type
 		void updateNodeData(int index, string T::*member, string newData) {
-			DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
+			DoublyNode<T> *ptr = this->getNodeAtIndex(index);
 			ptr->data.*member = newData;	// *member: pointer-to-member concept
 		}
 
 		// update member variables with double data type
 		void updateNodeData(int index, double T::*member, double newData) {
-			DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
+			DoublyNode<T> *ptr = this->getNodeAtIndex(index);
 			ptr->data.*member = newData;	// *member: pointer-to-member concept
 		}
 
