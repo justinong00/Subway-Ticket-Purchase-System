@@ -289,7 +289,7 @@ int main() {
                 user = Customer(newCustomer.id, newCustomer.username, newCustomer.password, newCustomer.ic,
                                 newCustomer.email);
                 userLst.insertLast(user);
-                cout << user.role.toString() << endl;
+                Menu::showNotification("Account was registered successfully");
                 if ((Menu::option == 0) | !user.username.empty()) {
                     Menu::addSpace();
                     break;
@@ -779,7 +779,7 @@ int main() {
                             else if (Menu::option == 4) {
                                 tempUser = userLst.getByEmail(userInput);
                                 if (!tempUser.email.empty()) {
-                                    Menu::showErrorMsg("Username already exists");
+                                    Menu::showErrorMsg("Email is in use");
                                     Menu::addSpace();
                                     continue;
                                 }
@@ -1764,10 +1764,22 @@ int main() {
                         }
 
 //                    Check if records already exist
-//                    Only checks username for admin registration, email and ic can be duplicated.
                         tempUser = userLst.getByUsername(tempUsername);
                         if (!tempUser.username.empty()) {
                             Menu::showErrorMsg("Username already exists");
+                            Menu::addSpace();
+                            continue;
+                        }
+                        tempUser = userLst.getByEmail(tempEmail);
+                        cout << tempUser.email << endl;
+                        if (!tempUser.email.empty()) {
+                            Menu::showErrorMsg("Email is in use");
+                            Menu::addSpace();
+                            continue;
+                        }
+                        tempUser = userLst.getByIc(tempIc);
+                        if (!tempUser.ic.empty()) {
+                            Menu::showErrorMsg("Ic is in use");
                             Menu::addSpace();
                             continue;
                         }
@@ -1830,6 +1842,7 @@ int main() {
                     tempAdmin.id = (userLst.getLast().id + 1);
                     Admin newAdmin = Admin(tempAdmin.id, tempAdmin.username, tempAdmin.password, tempAdmin.ic, tempAdmin.email);
                     userLst.insertLast(newAdmin);
+                    Menu::showNotification("Account was registered successfully");
                     if ((Menu::option == 0) | !newAdmin.password.empty()) {
                         Menu::addSpace();
                         break;
@@ -1930,7 +1943,7 @@ int main() {
                             else if (Menu::option == 4) {
                                 tempUser = userLst.getByEmail(userInput);
                                 if (!tempUser.email.empty()) {
-                                    Menu::showErrorMsg("Username already exists");
+                                    Menu::showErrorMsg("Email is in use");
                                     Menu::addSpace();
                                     continue;
                                 }
