@@ -96,7 +96,7 @@ public:
 
 	static void showErrorMsg(string description) {
 		cerr << description + ". Try Again\n" << endl;
-		Sleep(100);
+		Sleep(1500);
 	}
 
 	static void recordAndValidateOption(int min_val, int max_val, string inputTitle = "option") {
@@ -130,7 +130,8 @@ public:
 		cout << "3. Calculate Travel Information" << endl;
 		cout << "4. Purchase A Ticket" << endl;
 		cout << "5. View Purchase History" << endl;
-		recordAndValidateOption(0, 5);
+        cout << "6. Edit Personal Details" << endl;
+		recordAndValidateOption(0, 6);
 	}
 
 	static void showAdminMenu() {
@@ -143,7 +144,9 @@ public:
 		cout << "6. Search Customer Ticket Purchase" << endl;
 		cout << "7. Modify Customer Ticket Purchase" << endl;
 		cout << "8. Flush Year old Transactions" << endl;
-		recordAndValidateOption(0, 8);
+        cout << "9. Register New Admin" << endl;
+        cout << "10. Edit Personal Details" << endl;
+		recordAndValidateOption(0, 10);
 	}
 
 	static void addExitMenu(string menuTitle) {
@@ -151,13 +154,35 @@ public:
 		cout << "=================================================================" << endl;
 		cout << "Enter -1 to \"Exit To " << menuTitle << "\"" << endl;
 	}
-	//Added this
-	static void addProceedMenu(string menuTitle){
+
+
+
+//    ---------------------- Shaun + Amine
+    static void addProceedMenu(string menuTitle){
 		cout << endl;
 		cout << "=================================================================" << endl;
 		cout << "Enter 1 to \"Proceed To "<< menuTitle << "\"" << endl;
 	}
 
+
+
+//    ---------------------- Nigel
+    static void showMainMenu() {
+        addHeader("Main Menu", "Terminate");
+        cout << "1. Login" << endl;
+        cout << "2. Register" << endl;
+        recordAndValidateOption(0, 2);
+    }
+
+    static bool isStringOrZero(string userInput) {
+        if (isInteger(userInput) && userInput == "0") {return true;}
+        return false;
+    }
+
+    static void showNotification(string description) {
+        cout << description + ".\n" << endl;
+        Sleep(1500);
+    }
 };
 
 #endif

@@ -10,6 +10,8 @@
 #include <stdexcept>
 #include "Ticket.h"
 #include <string.h>
+#include "Customer.h"
+#include "Admin.h"
 
 using namespace std;
 
@@ -164,6 +166,7 @@ public:
         }
     }
 
+//    ---------------------- Shaun + Amine
     //Method overload, method body defined outside of class, NEW
     int getIndex(string TransID){return 0;}
 
@@ -178,6 +181,16 @@ public:
 
     //Method overload, method body defined outside of class
     void Modify(string TransID, string source, string dest, double amount, string dt){};
+
+//    ---------------------- Nigel
+    User getByUsername(string username);
+
+    User getByIc(string ic);
+
+    User getByEmail(string email);
+
+    bool modify(User user);
+
 
 private:
     LLNode<T> * atIndex(int index)
@@ -195,18 +208,12 @@ private:
         }
         return targetNode;
     }
+
 };
 
-// template<> void LinkedList<Song>::show()
-// {
-//     LLNode<Song> * curr = head;
-//     while (curr != nullptr)
-//     {
-//         cout << curr->val.artist << ", " << curr->val.name << ", " << curr->val.genre << endl;
-//         curr = curr->next;
-//     }
-// }
 
+
+//    ---------------------- Shaun + Amine
 
 //To view all Transaction and Ticket Details (for admins)
 template<>
@@ -348,5 +355,82 @@ void LinkedList<Ticket>::Modify(string TransID, string source, string dest, doub
 		cerr << "Ticket Not Found" << endl;
 	}
 }
+
+
+
+//    ---------------------- Nigel
+template<> void LinkedList<User>::show()
+{
+    LLNode<User> * curr = head;
+    while (curr != nullptr)
+    {
+        cout << curr->val.id << ", " << curr->val.username << ", " << curr->val.role.toString() << endl;
+        curr = curr->next;
+    }
+}
+
+template<>
+User LinkedList<User>::getByUsername(string username)
+{
+    LLNode<User> * curr = head;
+    while (curr != nullptr) {
+        if (curr->val.username == username) {
+            return curr->val;
+        }
+        curr = curr->next;
+    }
+    return {};
+}
+
+template<>
+User LinkedList<User>::getByIc(string ic)
+{
+    LLNode<User> * curr = head;
+    while (curr != nullptr) {
+        if (curr->val.ic == ic) {
+            return curr->val;
+        }
+        curr = curr->next;
+    }
+    return {};
+}
+
+template<>
+User LinkedList<User>::getByEmail(string email)
+{
+    LLNode<User> * curr = head;
+    while (curr != nullptr) {
+        if (curr->val.role.isAdmin()) {
+            curr = curr->next;
+            continue;
+        }
+
+        if (curr->val.email == email) {return curr->val;}
+        curr = curr->next;
+    }
+    return {};
+}
+
+template<>
+bool LinkedList<User>::modify(User user)
+{
+    bool isFound = false;
+    LLNode<User> * curr = head;
+    while (curr != nullptr)
+    {
+        if(curr->val.id == user.id)
+        {
+            isFound = true;
+            curr->val.username = user.username;
+            curr->val.password = user.password;
+            curr->val.ic = user.ic;
+            curr->val.email = user.email;
+            return isFound;
+        }
+        curr = curr->next;
+    }
+    return isFound;
+}
+
 
 #endif //DSTR_ASSIGNMENT_LINKEDLIST_H
