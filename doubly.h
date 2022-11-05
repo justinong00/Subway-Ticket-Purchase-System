@@ -246,17 +246,6 @@ class DoublyLinkedList {
 	    		throw runtime_error("The list is empty");
 	    }
 
-	    void updateNodeData(int index, double newData) {
-	    	DoublyNode<T> *ptr = this->getNodeAtIndex(index);
-	    	ptr->data = newData;
-	    }
-
-	    // method overload, to pass in string data type to modify data
-	    void updateNodeData(int index, string newData) {
-	    	DoublyNode<T> *ptr = this->getNodeAtIndex(index);
-	    	ptr->data = newData;
-	    }
-
 	    double getDataDifferenceBetweenTwoNodes(int start_index, int destination_index) {
 	    	double return_value = 0;
 
@@ -284,13 +273,13 @@ class DoublyLinkedList {
 		// method overload, method body defined outside class
 		void showForward(int mode) {}
 
-		// update Subway member variables with string data type
+		// update member variables with string data type
 		void updateNodeData(int index, string T::*member, string newData) {
 			DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
 			ptr->data.*member = newData;	// *member: pointer-to-member concept
 		}
 
-		// update Subway member variables with double data type
+		// update member variables with double data type
 		void updateNodeData(int index, double T::*member, double newData) {
 			DoublyNode<Subway> *ptr = this->getNodeAtIndex(index);
 			ptr->data.*member = newData;	// *member: pointer-to-member concept
