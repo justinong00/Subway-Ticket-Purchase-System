@@ -92,8 +92,14 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="TestProject.cdt.managedbuild.target.gnu.mingw.exe.688326621" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="refreshScope"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1223493727;cdt.managedbuild.config.gnu.mingw.exe.debug.1223493727.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1593075945;cdt.managedbuild.tool.gnu.cpp.compiler.input.1399494592">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.1793067901;cdt.managedbuild.config.gnu.mingw.exe.release.1793067901.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.1811564893;cdt.managedbuild.tool.gnu.cpp.compiler.input.155459230">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
@@ -103,11 +109,5 @@
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.1793067901;cdt.managedbuild.config.gnu.mingw.exe.release.1793067901.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.2066475739;cdt.managedbuild.tool.gnu.c.compiler.input.1923991111">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1223493727;cdt.managedbuild.config.gnu.mingw.exe.debug.1223493727.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1593075945;cdt.managedbuild.tool.gnu.cpp.compiler.input.1399494592">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="refreshScope"/>
 </cproject>
