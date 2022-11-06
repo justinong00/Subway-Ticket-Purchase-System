@@ -22,8 +22,10 @@ class Subway{
 
 		Subway() = default;
 
-		Subway(int subwayId, string currentStationName, string previousStationName, string nextStationName, double travelDistanceBetweenPreviousStation, double travelFareBetweenPreviousStation,
-				double travelTimeBetweenPreviousStation, double travelDistanceBetweenNextStation, double travelFareBetweenNextStation, double travelTimeBetweenNextStation, string nearbySightseeingSpots)
+		Subway(int subwayId, string currentStationName, string previousStationName, string nextStationName,
+				double travelDistanceBetweenPreviousStation, double travelFareBetweenPreviousStation, double travelTimeBetweenPreviousStation,
+				double travelDistanceBetweenNextStation, double travelFareBetweenNextStation, double travelTimeBetweenNextStation,
+				string nearbySightseeingSpots)
 		{
 			this->subwayId = subwayId;
 			this->currentStationName = currentStationName;
