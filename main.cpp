@@ -1565,7 +1565,7 @@ int main() {
                         cout << setprecision(2) << fixed;
                         TLL.sortNameAsc(); //Calls to sort the List in ascending order of Names
                         TLL.show(); //Displays the list
-                        Menu::addExitMenu("Customer Menu");
+                        Menu::addExitMenu("Admin Menu");
                         Menu::recordAndValidateOption(-1, 0);
                         Menu::addSpace();
                         break;
@@ -1605,7 +1605,7 @@ int main() {
                         TLL.sortByTransID();
                         TLL.show();
                         cout.precision(ss);
-                        Menu::addExitMenu("Customer Menu");
+                        Menu::addExitMenu("Admin Menu");
                         Menu::recordAndValidateOption(-1, 0); //Gives admin option to modify or go back
                         if (Menu::option == 0) {
                             //Admin can select to cancel of enter transaction ID to modify
@@ -1623,7 +1623,6 @@ int main() {
                                 lst.showForward(7);
                                 // Check Select Start And End Stations Option
                                 Menu::recordAndValidateOption(0, lst.getSize(), "Start Station");
-                                cout << "got here" << endl;
                                 if (Menu::option ==
                                     0) {        // Enter Start Station: 0, means want to Go Back to Customer Menu
                                     Menu::addSpace();
@@ -1632,7 +1631,6 @@ int main() {
                                     startStationOpt = Menu::option;
                                 CustomerSelectEndStationMod:
                                 Menu::recordAndValidateOption(0, lst.getSize(), "End Station");
-                                cout << "Got here too" << endl;
                                 if (Menu::option ==
                                     0) {        // Enter End Station: 0, means want to Go Back to Customer Menu
                                     Menu::addSpace();
@@ -1677,7 +1675,7 @@ int main() {
                                            lst.getNodeAtIndex(endStationOpt - 1)->data.currentStationName,
                                            lst.getDataDifferenceBetweenTwoNodes(startStationOpt - 1, endStationOpt - 1,
                                                                                 2), Dtime);
-                                Menu::addExitMenu("Customer Menu");
+                                Menu::addExitMenu("Admin Menu");
                                 Menu::recordAndValidateOption(-1, 0);
                                 Menu::addSpace();
                             }
@@ -1691,9 +1689,7 @@ int main() {
                 else if (Menu::option == 8) {
                     while (true) {
                         if (q.size() > 0) {
-                            cout << "here" << endl;
                             string TDateTime = q.getHead().getTransDT();
-                            cout << "here now" << endl;
                             string year = TDateTime.substr(TDateTime.size() - 5);
                             time_t now = time(0);
                             tm *ltm = localtime(&now);
@@ -1701,7 +1697,6 @@ int main() {
                             cout << year << endl << cyear << endl;
                             if (stoi(year) < cyear) {
                                 cout << year << endl;
-                                cout << "Do i even reach here?" << endl;
                                 string tid = q.getHead().getTrID();
                                 q.dequeue();
                                 int index = TLL.getIndex(tid);
