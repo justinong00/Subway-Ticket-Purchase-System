@@ -1576,15 +1576,16 @@ int main() {
                 else if (Menu::option == 6) {
                     while (true) {
                         Menu::addHeader("View Specific Customer Transactions", "Go back to Admin Menu");
-                        Menu::addSubHeader(
-                                "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
                         cout << "Enter Customer ID: ";
                         string ID;
                         getline(cin, ID);
+                        Menu::addSubHeader(
+                        		"Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
                         int CusID = stoi(ID);
                         if (CusID == 0) {//Will go back to Admin menu if 0 is entered
                             break;
                         } else {
+                        	cout << setprecision(2) << fixed;
                             TLL.showByCusID(CusID);//Displays the Ticket purchases of specific customer
                             Menu::addExitMenu("Admin Menu");
                             Menu::recordAndValidateOption(-1, 0);
@@ -1694,9 +1695,7 @@ int main() {
                             time_t now = time(0);
                             tm *ltm = localtime(&now);
                             int cyear = 1900 + ltm->tm_year;
-                            cout << year << endl << cyear << endl;
                             if (stoi(year) < cyear) {
-                                cout << year << endl;
                                 string tid = q.getHead().getTrID();
                                 q.dequeue();
                                 int index = TLL.getIndex(tid);
