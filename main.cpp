@@ -1540,6 +1540,7 @@ int main() {
                                 index = TLL.getIndex(TransID);//Checks for the index of the transaction ID
                                 if (index == -1) { // If the Transaction ID is not found
                                     Menu::showErrorMsg("Transaction Does Not Exist");
+                                    continue;
                                 } else {
                                     TLL.deleteAt(index); // Deletes the Transaction ID
                                     cout << endl << "Transaction Deleted";
