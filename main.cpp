@@ -47,7 +47,7 @@ int main() {
 		lst.insertAtEnd(Subway(108, "Chan Sow Lin", "Pudu", "END-OF-LINE", 5, 0.5, 4, 0, 0, 0, "Sunway Pyramid"));
 
 		// CUSTOMER FUNCTIONALITY
-/*		while (true) {
+		while (true) {
 			CustomerMenu:	// label for goto
 			Menu::showCustomerMenu();
 			Menu::addSpace();
@@ -137,13 +137,17 @@ int main() {
 						}
 						else if (stationDetailOpt == 3) {	// Next And Previous Stops (Select Station Detail)
 							Menu::addHeader("Next And Previous Stops For " + lst.getNodeAtIndex(Menu::option - 1)->data.currentStationName, "Go Back");
-							Menu::addSubHeader("Previous Station");
+							// gets the next and previous station from the target station and evaluate whether it is the end of the line.
 							string prevStation = lst.getNodeAtIndex(Menu::option - 1)->data.previousStationName == "END-OF-LINE" ? "None. It is END-OF-LINE" : lst.getNodeAtIndex(Menu::option - 1)->data.previousStationName;
-							cout << prevStation << endl;
-							cout << endl;
-							Menu::addSubHeader("Next Station");
 							string nextStation = lst.getNodeAtIndex(Menu::option - 1)->data.nextStationName == "END-OF-LINE" ? "None. It is END-OF-LINE" : lst.getNodeAtIndex(Menu::option - 1)->data.nextStationName;
-							cout << nextStation << endl;
+							Menu::addSubHeader(lst.getNodeAtIndex(0)->data.currentStationName + " -> " + lst.getNodeAtIndex(lst.getSize() - 1)->data.currentStationName);
+							cout << "Next Stop\t: " << nextStation << endl;
+							cout << "Previous Stop\t: " << prevStation << endl;
+							cout << endl;
+							Menu::addSubHeader(lst.getNodeAtIndex(lst.getSize() - 1)->data.currentStationName + " -> " + lst.getNodeAtIndex(0)->data.currentStationName);
+							// inverse because of reverse route (Chan Sow Lin -> Titiwangsa)
+							cout << "Next Stop\t: " << prevStation << endl;
+							cout << "Previous Stop\t: " << nextStation << endl;
 						}
 						else {								// Available Stops (Select Station Detail)
 							Menu::addHeader("Available Stops For " + lst.getNodeAtIndex(Menu::option - 1)->data.currentStationName, "Go Back");
@@ -234,10 +238,11 @@ int main() {
 			else if (Menu::option == 4) {
 
 			}
-		}*/
+		}
 
 
 		// ADMIN FUNCTIONALITY
+/*
 		while (true) {
 			AdminMenu:
 			Menu::showAdminMenu();
@@ -905,6 +910,7 @@ int main() {
 
 			}
 		}	// comment here to comment All Admin Functionalities
+*/
 	}
 
 
