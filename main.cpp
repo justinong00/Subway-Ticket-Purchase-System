@@ -646,8 +646,11 @@ int main() {
                 else if (Menu::option == 5) {
                     while (true) {
                         Menu::addHeader("Your Purchase History", "Delete a Purchase");
-                        Menu::addSubHeader(
-                                "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
+                        cout << "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time" << endl;
+                        for (int i = 0; i<18; i++){
+                        	cout << "==========";
+                        }
+                        cout <<endl;
                         cout << setprecision(2) << fixed;
                         int CusID = user.id; // This is where Customer ID will get its variable (for now it was 626 for testing)
                         TLL.sortByTransID();
@@ -1510,8 +1513,11 @@ int main() {
                     while (true) {
                         //Views all purchases and has an option to Delete a transaction
                         Menu::addHeader("All Ticket Purchase History", "Delete a Transaction");
-                        Menu::addSubHeader(
-                                "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
+                        cout << "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time" << endl;
+                        for (int i = 0; i<18; i++){
+                        	cout << "==========";
+                        }
+                        cout <<endl;
                         cout << setprecision(2) << fixed;
                         //Sorts the list by the transaction ID and displays all
                         TLL.sortByTransID();
@@ -1556,8 +1562,11 @@ int main() {
                     while (true) {
                         //Allows the admin to go back to menu if selected 0
                         Menu::addHeader("View Transactions based on Passenger Name", "Go back to Admin Menu");
-                        Menu::addSubHeader(
-                                "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
+                        cout << "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time" << endl;
+                        for (int i = 0; i<18; i++){
+                        	cout << "==========";
+                        }
+                        cout <<endl;
                         cout << setprecision(2) << fixed;
                         TLL.sortNameAsc(); //Calls to sort the List in ascending order of Names
                         TLL.show(); //Displays the list
@@ -1575,8 +1584,11 @@ int main() {
                         cout << "Enter Customer ID: ";
                         string ID;
                         getline(cin, ID);
-                        Menu::addSubHeader(
-                        		"Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
+                        cout << "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time" << endl;
+                        for (int i = 0; i<18; i++){
+                        	cout << "==========";
+                        }
+                        cout <<endl;
                         int CusID = stoi(ID);
                         if (CusID == 0) {//Will go back to Admin menu if 0 is entered
                             break;
@@ -1596,8 +1608,11 @@ int main() {
                     while (true) {
                         //First will show admin all purchases
                         Menu::addHeader("All Purchase History", "Modify a Transaction");
-                        Menu::addSubHeader(
-                                "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time");
+                        cout << "Transaction ID \tTicketID \tSource Station \tDestination \tTicket Amount \tDeparture Time \tCustomer ID \tCustomer Name \tCustomer IC \t\tTransaction Date and Time" << endl;
+                        for (int i = 0; i<18; i++){
+                        	cout << "==========";
+                        }
+                        cout <<endl;
                         cout << setprecision(2) << fixed;
                         TLL.sortByTransID();
                         TLL.show();
