@@ -29,9 +29,9 @@ streamsize ss = cout.precision();
 // T is data type for the value to be checked
 // U is the class of the object
 // V is the custom class (E.g., Subway)
-template<typename T, typename U, typename V>
-bool isTaken (T valToCheck, U classObj, T V::*member) {
-	for (int i = 0; i < classObj.getSize(); i++) {
+template<typename T, typename U, typename V, typename W>	//
+bool isTaken (T valToCheck, U classObj, T V::*member, W (U::*func)()) {	// U -> DLL class, V -> Subway Class, W -> because always return integer (lst.getSize())
+	for (int i = 0; i < (classObj.*func)(); i++) {	// (classObj.*func)() WHY? https://stackoverflow.com/questions/10901959/function-pointers-in-c-error-must-use-or-to-call-pointer-to-memb
 		if (valToCheck == classObj.getNodeAtIndex(i)->data.*member) {
 			return true;
 		}
@@ -901,7 +901,7 @@ int main() {
                                 continue;
                             }
                             // catch used ID from doubly linked list
-                            if (isTaken(stationID, lst, &Subway::subwayId)) {
+                            if (isTaken(stationID, lst, &Subway::subwayId, &DoublyLinkedList<Subway>::getSize)) {
                                 Menu::showErrorMsg("Subway ID taken");
                                 continue;
                             }
@@ -935,7 +935,7 @@ int main() {
                                 continue;
                             }
                             // catch used stationName from doubly linked list
-                            if (isTaken(tempUserInput, lst, &Subway::currentStationName)) {
+                            if (isTaken(tempUserInput, lst, &Subway::currentStationName, &DoublyLinkedList<Subway>::getSize)) {
                                 Menu::showErrorMsg("Station Name taken");
                                 continue;
                             }
@@ -1381,7 +1381,7 @@ int main() {
                                         continue;
                                     }
                                     // catch used Station Name from doubly linked list
-                                    if (isTaken(tempUserInput, lst, &Subway::currentStationName)) {
+                                    if (isTaken(tempUserInput, lst, &Subway::currentStationName, &DoublyLinkedList<Subway>::getSize)) {
                                         Menu::showErrorMsg("Station Name taken");
                                         continue;
                                     }
