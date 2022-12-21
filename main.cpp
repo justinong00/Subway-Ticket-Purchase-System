@@ -30,7 +30,7 @@ streamsize ss = cout.precision();
 // U is the class of the object
 // V is the custom class (E.g., Subway)
 template<typename T, typename U, typename V, typename W>	//
-bool isTaken (T valToCheck, U classObj, T V::*member, W (U::*func)()) {	// U -> DLL class, V -> Subway Class, W -> because always return integer (lst.getSize())
+bool isTaken (T valToCheck, U classObj, T (V::*member), W (U::*func)()) {	// U -> DLL class, V -> Subway Class, W -> because always return integer (lst.getSize())
 	for (int i = 0; i < (classObj.*func)(); i++) {	// (classObj.*func)() WHY? https://stackoverflow.com/questions/10901959/function-pointers-in-c-error-must-use-or-to-call-pointer-to-memb
 		if (valToCheck == classObj.getNodeAtIndex(i)->data.*member) {
 			return true;
